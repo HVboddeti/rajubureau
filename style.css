@@ -1,0 +1,570 @@
+/* General body and page layout */
+body {
+    font-family: 'Poppins', sans-serif;
+    margin: 20px;
+    background: linear-gradient(135deg, #f5f7fa, #c3cfe2); /* Gradient background */
+    color: #333;
+}
+
+/* Top button layout for Add and Share buttons */
+.top-buttons {
+    display: flex;
+    justify-content: flex-start;
+    gap: 1220px;
+    margin-bottom: 20px;
+}
+
+.add-button, .share-form-button {
+    color: white;
+    padding: 12px 24px;
+    text-decoration: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    transition: all 0.3s ease;
+}
+
+.add-button {
+    background: linear-gradient(135deg, #4CAF50, #2E7D32); /* Green gradient */
+    box-shadow: 0 4px 6px rgba(0, 128, 0, 0.3);
+}
+
+.add-button:hover {
+    background: linear-gradient(135deg, #2E7D32, #1B5E20);
+    transform: translateY(-2px);
+}
+
+.share-form-button {
+    background: linear-gradient(135deg, #FF5252, #D32F2F);
+    box-shadow: 0 4px 6px rgba(255, 0, 0, 0.3);
+}
+
+.share-form-button:hover {
+    background: linear-gradient(135deg, #D32F2F, #B71C1C);
+    transform: translateY(-2px);
+}
+
+/* Caste category layout */
+.caste-categories {
+    margin-top: 20px;
+}
+
+.caste-category {
+    margin-bottom: 15px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 15px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.caste-category:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+.caste-category h2 {
+    margin: 0;
+    font-size: 22px;
+    font-weight: bold;
+    color: #444;
+}
+
+.expand-button {
+    font-size: 20px;
+    float: right;
+    color: #777;
+}
+
+/* Profile table */
+.profile-table {
+    display: none;
+    margin-top: 10px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 14px;
+    text-align: left;
+}
+
+th {
+    background: linear-gradient(135deg, #ff9800, #f57c00);
+    color: white;
+    font-weight: bold;
+}
+
+/* Action buttons (View and Share) */
+.action-buttons a {
+    text-decoration: none;
+    color: white;
+    padding: 10px 16px;
+    margin-right: 8px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+.action-buttons .view-button {
+    background: linear-gradient(135deg, #1E88E5, #1565C0);
+}
+
+.action-buttons .view-button:hover {
+    background: linear-gradient(135deg, #1565C0, #0D47A1);
+}
+
+.action-buttons .share-button {
+    background: linear-gradient(135deg, #E53935, #C62828);
+}
+
+.action-buttons .share-button:hover {
+    background: linear-gradient(135deg, #C62828, #B71C1C);
+}
+
+/* Modal styling */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+}
+
+.modal-content {
+    background: white;
+    margin: 10% auto;
+    padding: 25px;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 500px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+    position: relative;
+}
+
+.close {
+    color: #555;
+    font-size: 24px;
+    font-weight: bold;
+    position: absolute;
+    top: 12px;
+    right: 18px;
+    cursor: pointer;
+}
+
+.close:hover {
+    color: black;
+}
+
+/* Form container with improved responsiveness */
+.form-container {
+    display: grid;
+    grid-template-columns: minmax(120px, 1fr) minmax(200px, 2fr); /* More flexible columns */
+    gap: 15px;
+    width: 80%;
+    max-width: 600px;
+    margin: auto;
+    padding: 20px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    overflow-y: auto; /* Allow scrolling if needed */
+    max-height: 60vh; /* Limit height and enable scrolling */
+}
+
+/* Label styles with better alignment */
+.form-container label {
+    font-weight: bold;
+    text-align: right;
+    padding-right: 10px;
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    color: #333;
+}
+
+/* Input fields with consistent sizing */
+.form-container input,
+.form-container select {
+    width: 100%;
+    padding: 8px 10px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 15px;
+    box-sizing: border-box; /* Include padding in width calculation */
+}
+
+/* Focus state for better usability */
+.form-container input:focus,
+.form-container select:focus {
+    outline: none;
+    border-color: #4CAF50;
+    box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.2);
+}
+
+/* Button styling that spans both columns */
+.form-container button {
+    grid-column: span 2;
+    width: 100%;
+    background: linear-gradient(135deg, #4CAF50, #2E7D32);
+    color: white;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.2s;
+    margin-top: 10px;
+}
+
+.form-container button:hover {
+    background: linear-gradient(135deg, #2E7D32, #1B5E20);
+    transform: translateY(-2px);
+}
+
+/* Modal responsiveness for smaller screens */
+@media (max-width: 500px) {
+    .form-container {
+        grid-template-columns: 1fr; /* Single column on mobile */
+        padding: 15px;
+        gap: 10px;
+    }
+    
+    .form-container label {
+        text-align: left;
+        justify-content: flex-start;
+    }
+    
+    .form-container button {
+        grid-column: 1;
+    }
+}
+
+/* Additional class for field groups if needed */
+.form-field {
+    display: contents; /* Makes children participate in the parent grid */
+}
+
+/* Dialog/modal-specific styles */
+.modal-dialog {
+    max-width: 650px;
+    margin: 1.75rem auto;
+}
+
+/* Scrollbar styling for better aesthetics */
+.form-container::-webkit-scrollbar {
+    width: 8px;
+}
+
+.form-container::-webkit-scrollbar-thumb {
+    background-color: #ccc;
+    border-radius: 10px;
+}
+/* Responsive design */
+@media screen and (max-width: 768px) {
+    .top-buttons {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .caste-category {
+        text-align: center;
+    }
+}
+
+
+.top-dashboard {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.search-bar {
+    width: 50%;
+    padding: 12px;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    font-size: 16px;
+    outline: none;
+    transition: 0.3s;
+}
+
+.search-bar:focus {
+    border-color: #4CAF50;
+    box-shadow: 0 0 8px rgba(76, 175, 80, 0.5);
+}
+
+
+
+/* View Button Styling */
+.view-button {
+    display: inline-block;
+    background: linear-gradient(135deg, #4CAF50, #2E7D32);
+    color: white;
+    padding: 12px 20px; /* Adjust horizontal padding as needed */
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    text-decoration: none; /* Removes underline from links */
+    text-align: center;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.2s;
+}
+
+.view-button:hover {
+    background: linear-gradient(135deg, #2E7D32, #1B5E20);
+    transform: translateY(-2px);
+}
+
+/* Optional: Responsiveness for smaller screens */
+@media (max-width: 500px) {
+    .view-button {
+        padding: 10px 16px;
+        font-size: 15px;
+    }
+}
+
+/* Profile Details Container - Two-column layout */
+.profile-details-container {
+    display: grid;
+    grid-template-columns: 1fr 2fr; /* Labels take less space than values */
+    gap: 10px 15px;
+    padding: 20px;
+    background: #fff;
+    border-radius: 8px;
+    font-size: 16px;
+}
+
+/* Labels (Bold text on the left) */
+.profile-details-container strong {
+    text-align: right;
+    font-weight: bold;
+    color: #333;
+}
+
+/* Values (Regular text on the right) */
+.profile-details-container span {
+    text-align: left;
+    font-size: 16px;
+    color: #555;
+}
+
+/* Styling for missing values */
+.profile-details-container span.empty {
+    color: #aaa; /* Grey out missing values */
+    font-style: italic;
+}
+
+/* Modal container */
+.modal-content {
+    max-width: 600px;
+    max-height: 60vh;
+    overflow-y: auto;
+    padding: 20px;
+    border-radius: 20px;
+    background: white;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* Responsive adjustments */
+@media (max-width: 500px) {
+    .profile-details-container {
+        grid-template-columns: 1fr; /* Single column on small screens */
+    }
+
+    .profile-details-container strong {
+        text-align: left;
+    }
+}
+
+
+/* Share Button Styling */
+.share-button {
+    display: inline-block;
+    background: linear-gradient(135deg, #FF5252, #D32F2F); /* Red gradient */
+    color: white;
+    padding: 12px 20px; /* Adjust horizontal padding as needed */
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    text-decoration: none; /* Removes underline from links */
+    text-align: center;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.2s;
+}
+
+.share-button:hover {
+    background: linear-gradient(135deg, #D32F2F, #B71C1C);
+    transform: translateY(-2px);
+}
+
+/* Optional: Responsiveness for smaller screens */
+@media (max-width: 500px) {
+    .share-button {
+        padding: 10px 16px;
+        font-size: 15px;
+    }
+}
+
+
+/* Filter Button */
+.filter-button {
+    background: linear-gradient(135deg, #FF9800, #F57C00);
+    color: white;
+    padding: 12px 16px;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.2s;
+    margin-left: 10px;
+}
+
+.filter-button:hover {
+    background: linear-gradient(135deg, #F57C00, #E65100);
+    transform: translateY(-2px);
+}
+
+/* Filter Modal */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+}
+
+.modal-content {
+    background: white;
+    margin: 10% auto;
+    padding: 20px;
+    border-radius: 12px;
+    width: 50%;
+    max-width: 500px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+    position: relative;
+}
+
+.close {
+    color: #555;
+    font-size: 24px;
+    font-weight: bold;
+    position: absolute;
+    top: 12px;
+    right: 18px;
+    cursor: pointer;
+}
+
+.close:hover {
+    color: black;
+}
+
+.filter-button {
+    display: block; /* Ensure it appears */
+    width: 100%;
+    padding: 10px;
+    background: #4CAF50;
+    color: white;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+    text-align: center;
+}
+
+.filter-button:hover {
+    background: #2E7D32;
+}
+
+
+/* 📌 Style for the share dropdown container */
+.share-dropdown-container {
+    position: relative;
+    display: inline-block;
+}
+
+/* 📌 Style for the share dropdown */
+.share-dropdown {
+    position: absolute;
+    top: 100%;
+    left: -50%;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    display: none;
+    flex-direction: column;
+    padding: 10px;
+    min-width: 200px;
+    z-index: 1000;
+}
+
+/* 📌 Show dropdown when visible */
+.share-dropdown-container:hover .share-dropdown {
+    display: flex;
+}
+
+/* 📌 Style for each share button (Gmail, WhatsApp, SMS) */
+.share-dropdown a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    font-size: 16px;
+    font-weight: 500;
+    text-decoration: none;
+    color: #333;
+    transition: background 0.3s ease-in-out;
+    border-radius: 6px;
+}
+
+/* 📌 Icons for each share button */
+.share-dropdown a::before {
+    content: "";
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+/* ✅ Gmail Icon */
+.share-dropdown a[href^="mailto"]::before {
+    background-image: url("https://upload.wikimedia.org/wikipedia/commons/7/7e/Gmail_icon_(2020).svg");
+}
+
+/* ✅ WhatsApp Icon */
+.share-dropdown a[href^="https://wa.me"]::before {
+    background-image: url("https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg");
+}
+
+/* ✅ SMS Icon */
+.share-dropdown a[href^="sms"]::before {
+    background-image: url("https://cdn-icons-png.flaticon.com/512/724/724664.png");
+}
+
+/* 📌 Hover Effect */
+.share-dropdown a:hover {
+    background: #f5f5f5;
+}

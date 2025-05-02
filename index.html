@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Marriage Bureau Dashboard</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <h1>Marriage Bureau Dashboard</h1>
+
+  <div class="top-buttons">
+    <button id="add-button" class="add-button">+ Add Profile</button>
+  </div>
+
+  <div class="top-dashboard">
+    <input type="text" id="searchBar" class="search-bar" placeholder="Search profiles..." />
+  </div>
+
+  <div id="profiles-container"></div>
+
+  <!-- Modal for adding profile -->
+  <div id="add-profile-modal" class="modal">
+    <div class="modal-content">
+      <span class="close" id="close-add-modal">&times;</span>
+      <h2>Add New Profile</h2>
+      <form id="profile-form">
+        <input type="text" name="name" placeholder="Name" required />
+        <input type="text" name="surname" placeholder="Surname" required />
+        <input type="number" name="age" placeholder="Age" required />
+        <input type="text" name="caste" placeholder="Caste" required />
+        <select name="gender" required>
+          <option value="">Gender</option>
+          <option value="Male">Male</option>
+          <option value="Female">Female</option>
+        </select>
+        <input type="text" name="education" placeholder="Education" />
+        <input type="text" name="profession" placeholder="Profession" />
+        <input type="text" name="contact" placeholder="Contact No" />
+        <input type="text" name="additional_contact" placeholder="Additional Contact" />
+        <input type="date" name="dob" placeholder="DOB" />
+        <input type="text" name="place_of_birth" placeholder="Place of Birth" />
+        <input type="text" name="nakshatram" placeholder="Nakshatram" />
+        <input type="text" name="paadam" placeholder="Paadam" />
+        <input type="text" name="raasi" placeholder="Raasi" />
+        <input type="text" name="height" placeholder="Height" />
+        <input type="text" name="working_place" placeholder="Working Place" />
+        <input type="text" name="income" placeholder="Income" />
+        <input type="text" name="father_name" placeholder="Father's Name" />
+        <input type="text" name="father_profession" placeholder="Father's Profession" />
+        <input type="text" name="mother_name" placeholder="Mother's Name" />
+        <input type="text" name="mother_profession" placeholder="Mother's Profession" />
+        <input type="text" name="native_place" placeholder="Native Place" />
+        <input type="text" name="present_residence" placeholder="Present Residence" />
+        <input type="number" name="number_of_brothers" placeholder="No of Brothers" />
+        <input type="text" name="married_brothers" placeholder="Married Brothers" />
+        <input type="number" name="number_of_sisters" placeholder="No of Sisters" />
+        <input type="text" name="married_sisters" placeholder="Married Sisters" />
+        <input type="text" name="additional_info" placeholder="Additional Info" />
+        <button type="submit">Submit</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
