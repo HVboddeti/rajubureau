@@ -134,40 +134,7 @@ body {
     cursor: pointer;
   }
   
-  /* Responsive */
-  @media (max-width: 768px) {
-    .search-bar {
-      width: 80%;
-    }
-  
-    table, thead, tbody, th, td, tr {
-      display: block;
-    }
-  
-    th {
-      display: none;
-    }
-  
-    td {
-      position: relative;
-      padding-left: 50%;
-    }
-  
-    td::before {
-      position: absolute;
-      top: 12px;
-      left: 12px;
-      width: 45%;
-      white-space: nowrap;
-      font-weight: bold;
-      color: #999;
-    }
-  
-    .toggle-details {
-      font-size: 16px;
-    }
-  }
-
+  /* Stats Summary Box */
   .summary-container {
     text-align: center;
     background-color: #FFE8DC;
@@ -202,4 +169,45 @@ body {
     min-width: 160px;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
     font-size: 16px;
+  }
+  
+  /* 📱 Responsive Tables */
+  @media (max-width: 768px) {
+    .search-bar {
+      width: 90%;
+    }
+  
+    table, thead, tbody, th, td, tr {
+      display: block;
+      width: 100%;
+    }
+  
+    table thead {
+      display: none;
+    }
+  
+    table tr {
+      margin-bottom: 12px;
+      border-bottom: 1px solid #ccc;
+    }
+  
+    table td {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px;
+      font-size: 14px;
+      border: none;
+      border-bottom: 1px solid #eee;
+    }
+  
+    table td::before {
+      content: attr(data-label);
+      font-weight: bold;
+      color: #333;
+      margin-right: 10px;
+    }
+  
+    .toggle-details {
+      font-size: 16px;
+    }
   }
