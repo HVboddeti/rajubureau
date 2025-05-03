@@ -14,13 +14,18 @@
     <a href="https://wa.me/?text=Please fill out this form: https://docs.google.com/forms/d/e/1FAIpQLScdkDc5cqemXc23vy4DYUPWxjYx5H6vXLdtoIQ01RH3Bg-6VQ/viewform?usp=sharing" target="_blank">💬 Share via WhatsApp</a>
     <a href="sms:?body=Please fill out this form: https://docs.google.com/forms/d/e/1FAIpQLScdkDc5cqemXc23vy4DYUPWxjYx5H6vXLdtoIQ01RH3Bg-6VQ/viewform?usp=sharing" target="_blank">📱 Share via SMS</a>
   </div>
-  
 
   <div class="top-dashboard">
     <input type="text" id="searchBar" class="search-bar" placeholder="Search profiles..." />
   </div>
 
   <div id="profiles-container"></div>
+
+  <div class="share-options">
+    <button onclick="shareSelectedWhatsApp()">Share via WhatsApp</button>
+    <button onclick="shareSelectedGmail()">Share via Gmail</button>
+    <button onclick="shareSelectedSMS()">Share via SMS</button>
+  </div>
 
   <script src="script.js"></script>
 </body>
