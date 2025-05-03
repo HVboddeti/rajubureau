@@ -94,10 +94,11 @@ function renderProfiles(filter = "") {
                 .join("<br>")
             : "No Photo";
 
-          const detailsHTML = Object.entries(p)
-            .filter(([key]) => !["index", "photos", "name", "age", "gender", "education", "profession", "caste"].includes(key))
-            .map(([key, val]) => `<div><strong>${key.replace(/_/g, " ")}:</strong> ${val}</div>`)
-            .join("");
+          const detailsHTML = `<div class="details-wrapper">` +
+            Object.entries(p)
+              .filter(([key]) => !["index", "photos", "name", "age", "gender", "education", "profession", "caste"].includes(key))
+              .map(([key, val]) => `<div class="detail-item"><strong>${key.replace(/_/g, " ")}:</strong> ${val}</div>`)
+              .join("") + `</div>`;
 
           return `
             <tr>
