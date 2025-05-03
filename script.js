@@ -7,11 +7,54 @@ async function fetchProfiles() {
   try {
     const res = await fetch(API_URL);
     const data = await res.json();
-    window.allProfiles = data.map((p, i) => ({ ...p, index: i }));
+    window.allProfiles = data;
+    renderStats(data);
     renderProfiles();
   } catch (err) {
     console.error("Error loading profiles:", err);
   }
+}
+
+function renderStats(data) {
+  let statsContainer = document.getElementById("stats-container");
+  if (!statsContainer) {
+    statsContainer = document.createElement("div");
+    statsContainer.id = "stats-container";
+    statsContainer.className = "summary-container";
+    document.body.insertBefore(statsContainer, document.getElementById("profiles-container"));
+  }
+
+  const casteCounts = {};
+  let totalMales = 0;
+  let totalFemales = 0;
+
+  data.forEach(profile => {
+    const caste = profile.caste || "Unknown";
+    if (!casteCounts[caste]) casteCounts[caste] = { male: 0, female: 0 };
+    const gender = (profile.gender || '').toLowerCase();
+    if (gender === "male") {
+      casteCounts[caste].male++;
+      totalMales++;
+    } else if (gender === "female") {
+      casteCounts[caste].female++;
+      totalFemales++;
+    }
+  });
+
+  const totalPeople = totalMales + totalFemales;
+  const summaryItems = Object.entries(casteCounts).map(([caste, counts]) => {
+    return `<div class="summary-item"><strong>${caste}</strong><br>${counts.male + counts.female} (M: ${counts.male}, F: ${counts.female})</div>`;
+  }).join("");
+
+  statsContainer.innerHTML = `
+    <h3>Profile Summary</h3>
+    <div class="summary-grid">
+      <div class="summary-item"><strong>Total</strong><br>${totalPeople} People</div>
+      <div class="summary-item"><strong>Male</strong><br>${totalMales}</div>
+      <div class="summary-item"><strong>Female</strong><br>${totalFemales}</div>
+      ${summaryItems}
+    </div>
+  `;
 }
 
 function renderProfiles(filter = "") {
@@ -19,10 +62,10 @@ function renderProfiles(filter = "") {
   container.innerHTML = "";
 
   const casteGroups = {};
-
-  window.allProfiles.forEach(profile => {
+  window.allProfiles.forEach((profile, index) => {
     const caste = profile.caste || "Unknown";
     if (!casteGroups[caste]) casteGroups[caste] = [];
+    profile.index = index;
     casteGroups[caste].push(profile);
   });
 
@@ -46,7 +89,7 @@ function renderProfiles(filter = "") {
         ${filteredProfiles.map(p => {
           const photoHTML = p.photos
             ? p.photos
-                .split(/[,\s]+/)
+                .split(/[\,\s]+/)
                 .map(link => `<a href="${link.trim()}" target="_blank">View Photo</a>`)
                 .join("<br>")
             : "No Photo";
@@ -67,9 +110,7 @@ function renderProfiles(filter = "") {
               <td>${p.profession || ""}</td>
               <td><button class="toggle-details" data-details-id="details-${p.index}">▶</button></td>
             </tr>
-            <tr id="details-${p.index}" class="details-row" style="display:none;">
-              <td colspan="8">${detailsHTML}</td>
-            </tr>`;
+            <tr id="details-${p.index}" class="details-row" style="display:none;"><td colspan="8">${detailsHTML}</td></tr>`;
         }).join("")}
       </tbody>
     `;
@@ -112,13 +153,11 @@ function shareSelectedSMS() {
   window.open(`sms:?body=${encoded}`, "_blank");
 }
 
-// 🔍 Search filter
-document.getElementById("searchBar").addEventListener("input", function () {
-  const filter = this.value.toLowerCase();
-  renderProfiles(filter);
-});
+// 🔍 Search input
+const searchInput = document.getElementById("searchBar");
+searchInput.addEventListener("input", () => renderProfiles(searchInput.value.toLowerCase()));
 
-// ✅ Track checkbox state
+// 🔘 Checkbox state tracker
 document.addEventListener("change", function (e) {
   if (e.target.classList.contains("profile-checkbox")) {
     const index = parseInt(e.target.dataset.index);
@@ -130,7 +169,7 @@ document.addEventListener("change", function (e) {
   }
 });
 
-// 🔽 Expand/Collapse details
+// 🔽 Expand/Collapse
 document.addEventListener("click", function (e) {
   if (e.target.classList.contains("toggle-details")) {
     const detailsId = e.target.dataset.detailsId;
@@ -145,5 +184,5 @@ document.addEventListener("click", function (e) {
   }
 });
 
-// 🚀 Initial fetch
+// 🚀 Init
 fetchProfiles();
