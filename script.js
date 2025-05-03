@@ -101,14 +101,14 @@ function renderProfiles(filter = "") {
 
           return `
             <tr>
-              <td data-label="Select"><input type="checkbox" class="profile-checkbox" data-index="${p.index}" ${selectedIndices.has(p.index) ? "checked" : ""}></td>
-              <td data-label="Photo">${photoHTML}</td>
-              <td data-label="Name">${p.name || ""}</td>
-              <td data-label="Age">${p.age || ""}</td>
-              <td data-label="Gender">${p.gender || ""}</td>
-              <td data-label="Education">${p.education || ""}</td>
-              <td data-label="Profession">${p.profession || ""}</td>
-              <td data-label="More"><button class="toggle-details" data-details-id="details-${p.index}">▶</button></td>
+              <td><input type="checkbox" class="profile-checkbox" data-index="${p.index}" ${selectedIndices.has(p.index) ? "checked" : ""}></td>
+              <td>${photoHTML}</td>
+              <td>${p.name || ""}</td>
+              <td>${p.age || ""}</td>
+              <td>${p.gender || ""}</td>
+              <td>${p.education || ""}</td>
+              <td>${p.profession || ""}</td>
+              <td><button class="toggle-details" data-details-id="details-${p.index}">▶</button></td>
             </tr>
             <tr id="details-${p.index}" class="details-row" style="display:none;"><td colspan="8">${detailsHTML}</td></tr>`;
         }).join("")}
