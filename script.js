@@ -9,7 +9,6 @@ async function fetchProfiles() {
     const container = document.getElementById("profiles-container");
     container.innerHTML = "";
 
-    // Group by caste
     const casteGroups = {};
     data.forEach(profile => {
       const caste = profile.caste || "Unknown";
@@ -49,36 +48,44 @@ async function fetchProfiles() {
   }
 }
 
-// 📤 Handle form submission
-document.getElementById("profile-form").addEventListener("submit", async function (e) {
+// 📤 Handle form submission via iframe (avoids CORS)
+document.getElementById("profile-form").addEventListener("submit", function (e) {
   e.preventDefault();
 
   const formData = new FormData(this);
   const data = Object.fromEntries(formData.entries());
-  const formBody = new URLSearchParams(data).toString();
 
-  try {
-    const res = await fetch(API_URL, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded"
-      },
-      body: formBody,
-    });
+  // Create a hidden iframe and form for submission
+  const iframe = document.createElement("iframe");
+  iframe.name = "hidden_iframe";
+  iframe.style.display = "none";
+  document.body.appendChild(iframe);
 
-    const result = await res.json();
-    if (result.success) {
-      alert("Profile added!");
-      this.reset();
-      document.getElementById("add-profile-modal").style.display = "none";
-      fetchProfiles(); // Refresh list
-    } else {
-      alert("Error adding profile.");
-    }
-  } catch (err) {
-    console.error("Submit error:", err);
-    alert("Error submitting profile.");
+  const form = document.createElement("form");
+  form.action = API_URL;
+  form.method = "POST";
+  form.target = "hidden_iframe";
+
+  for (let key in data) {
+    const input = document.createElement("input");
+    input.type = "hidden";
+    input.name = key;
+    input.value = data[key];
+    form.appendChild(input);
   }
+
+  document.body.appendChild(form);
+
+  iframe.onload = () => {
+    alert("Profile added!");
+    document.getElementById("profile-form").reset();
+    document.getElementById("add-profile-modal").style.display = "none";
+    fetchProfiles();
+    form.remove();
+    iframe.remove();
+  };
+
+  form.submit();
 });
 
 // 🔍 Search filter
