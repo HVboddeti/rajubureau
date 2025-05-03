@@ -48,38 +48,6 @@ async function fetchProfiles() {
   }
 }
 
-// 📤 Handle form submission
-document.getElementById("profile-form").addEventListener("submit", async function (e) {
-  e.preventDefault();
-
-  const formData = new FormData(this);
-  const data = Object.fromEntries(formData.entries());
-  const formBody = new URLSearchParams(data).toString();
-
-  try {
-    const res = await fetch(API_URL, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded"
-      },
-      body: formBody,
-    });
-
-    const result = await res.json();
-    if (result.success) {
-      alert("Profile added!");
-      this.reset();
-      document.getElementById("add-profile-modal").style.display = "none";
-      fetchProfiles(); // Refresh list
-    } else {
-      alert("Error adding profile.");
-    }
-  } catch (err) {
-    console.error("Submit error:", err);
-    alert("Error submitting profile.");
-  }
-});
-
 // 🔍 Search filter
 document.getElementById("searchBar").addEventListener("input", function () {
   const filter = this.value.toLowerCase();
