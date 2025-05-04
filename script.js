@@ -2,6 +2,11 @@ const API_URL = "https://script.google.com/macros/s/AKfycbzO45Lscp0APoqDSA5z00o5
 
 const selectedIndices = new Set();
 
+// Title Case Utility
+function toTitleCase(str) {
+  return str.toLowerCase().replace(/\b\w/g, char => char.toUpperCase());
+}
+
 // 📥 Fetch and render profiles
 async function fetchProfiles() {
   try {
@@ -29,7 +34,7 @@ function renderStats(data) {
   let totalFemales = 0;
 
   data.forEach(profile => {
-    const caste = profile.caste || "Unknown";
+    const caste = toTitleCase(profile.caste || "Unknown");
     if (!casteCounts[caste]) casteCounts[caste] = { male: 0, female: 0 };
     const gender = (profile.gender || '').toLowerCase();
     if (gender === "male") {
@@ -63,7 +68,7 @@ function renderProfiles(filter = "") {
 
   const casteGroups = {};
   window.allProfiles.forEach((profile, index) => {
-    const caste = profile.caste || "Unknown";
+    const caste = toTitleCase(profile.caste || "Unknown");
     if (!casteGroups[caste]) casteGroups[caste] = [];
     profile.index = index;
     casteGroups[caste].push(profile);
