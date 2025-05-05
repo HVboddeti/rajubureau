@@ -6,11 +6,8 @@ function toTitleCase(str) {
   return str.toLowerCase().replace(/\b\w/g, char => char.toUpperCase());
 }
 
-// 🔍 Normalize caste with smart matching and tag detection
 function normalizeCaste(rawCaste) {
   const casteStr = (rawCaste || "Unknown").toLowerCase().replace(/[^a-z0-9\s]/gi, "").trim();
-
-  // Group all Gavara-related entries under one label
   if (casteStr.includes("gavara")) return "Gavara";
 
   const knownCastes = [
@@ -28,13 +25,26 @@ function normalizeCaste(rawCaste) {
   return toTitleCase(casteStr);
 }
 
-
 async function fetchProfiles() {
   try {
     const res = await fetch(API_URL);
     const data = await res.json();
-    window.allProfiles = data;
-    renderStats(data);
+
+    // ✅ Deduplicate profiles based on name + date_of_birth + gender
+    const clean = str => (str || "").toString().trim().toLowerCase().replace(/\s+/g, "");
+    const seen = new Set();
+    const uniqueProfiles = [];
+
+    data.forEach(profile => {
+      const key = `${clean(profile.name)}_${clean(profile.date_of_birth)}_${clean(profile.gender)}`;
+      if (!seen.has(key)) {
+        seen.add(key);
+        uniqueProfiles.push(profile);
+      }
+    });
+
+    window.allProfiles = uniqueProfiles;
+    renderStats(uniqueProfiles);
     renderProfiles();
   } catch (err) {
     console.error("Error loading profiles:", err);
