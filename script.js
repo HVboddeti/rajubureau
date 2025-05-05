@@ -2,12 +2,35 @@ const API_URL = "https://script.google.com/macros/s/AKfycbzO45Lscp0APoqDSA5z00o5
 
 const selectedIndices = new Set();
 
-// Title Case Utility
 function toTitleCase(str) {
   return str.toLowerCase().replace(/\b\w/g, char => char.toUpperCase());
 }
 
-// 📥 Fetch and render profiles
+// 🔍 Normalize caste with smart matching and tag detection
+function normalizeCaste(rawCaste) {
+  const casteStr = (rawCaste || "Unknown").toLowerCase().replace(/[^a-z0-9\s]/gi, "").trim();
+
+  const knownCastes = [
+    "gavara", "gavarapalem", "bc d gavara", "gavara b c d", "bc-dgavara", "gavara group d",
+    "viswabrahmins", "koppela velama", "padmanayaka velama", "bcd", "kaikala", "velama", "naidu", "reddy",
+    "kapu", "yadav", "kamma", "balija", "vysya", "muslim", "christian", "sc", "st", "bc", "oc"
+  ];
+
+  let matchedCaste = "Unknown";
+  for (const caste of knownCastes) {
+    if (casteStr.includes(caste.replace(/[^a-z0-9]/gi, ""))) {
+      matchedCaste = toTitleCase(caste);
+      break;
+    }
+  }
+
+  const tagRegex = /(b\.?c\.?[-\s]?[abcd])/i;
+  const match = casteStr.match(tagRegex);
+  const bcTag = match ? match[0].toUpperCase().replace(/[^A-Z]/g, "") : null;
+
+  return bcTag ? `${matchedCaste} (BC-${bcTag.slice(-1)})` : matchedCaste;
+}
+
 async function fetchProfiles() {
   try {
     const res = await fetch(API_URL);
@@ -20,7 +43,6 @@ async function fetchProfiles() {
   }
 }
 
-// 📊 Stats with normalized caste values
 function renderStats(data) {
   let statsContainer = document.getElementById("stats-container");
   if (!statsContainer) {
@@ -35,8 +57,7 @@ function renderStats(data) {
   let totalFemales = 0;
 
   data.forEach(profile => {
-    const casteRaw = (profile.caste || "Unknown").trim().toLowerCase();
-    const caste = toTitleCase(casteRaw);
+    const caste = normalizeCaste(profile.caste);
     if (!casteCounts[caste]) casteCounts[caste] = { male: 0, female: 0 };
     const gender = (profile.gender || '').toLowerCase();
     if (gender === "male") {
@@ -64,28 +85,25 @@ function renderStats(data) {
   `;
 }
 
-// 🧾 Render profiles grouped by normalized caste
 function renderProfiles(filter = "") {
   const container = document.getElementById("profiles-container");
   container.innerHTML = "";
 
   const casteGroups = {};
   window.allProfiles.forEach((profile, index) => {
-    const casteRaw = (profile.caste || "Unknown").trim().toLowerCase();
-    const casteDisplay = toTitleCase(casteRaw);
-    if (!casteGroups[casteRaw]) casteGroups[casteRaw] = { display: casteDisplay, profiles: [] };
+    const caste = normalizeCaste(profile.caste);
+    if (!casteGroups[caste]) casteGroups[caste] = [];
     profile.index = index;
-    casteGroups[casteRaw].profiles.push(profile);
+    casteGroups[caste].push(profile);
   });
 
-  for (const key in casteGroups) {
-    const group = casteGroups[key];
+  for (const caste in casteGroups) {
     const div = document.createElement("div");
     div.classList.add("caste-category");
-    div.innerHTML = `<h2>${group.display}</h2>`;
+    div.innerHTML = `<h2>${caste}</h2>`;
 
     const table = document.createElement("table");
-    const filteredProfiles = group.profiles.filter(p =>
+    const filteredProfiles = casteGroups[caste].filter(p =>
       !filter || Object.values(p).join(" ").toLowerCase().includes(filter)
     );
 
@@ -137,7 +155,6 @@ function renderProfiles(filter = "") {
   }
 }
 
-// 📌 Helpers for sharing profiles
 function getSelectedProfiles() {
   return window.allProfiles.filter((_, i) => selectedIndices.has(i));
 }
@@ -172,11 +189,9 @@ function shareSelectedSMS() {
   window.open(`sms:?body=${encoded}`, "_blank");
 }
 
-// 🔍 Search input
 const searchInput = document.getElementById("searchBar");
 searchInput.addEventListener("input", () => renderProfiles(searchInput.value.toLowerCase()));
 
-// 🔘 Checkbox state tracker
 document.addEventListener("change", function (e) {
   if (e.target.classList.contains("profile-checkbox")) {
     const index = parseInt(e.target.dataset.index);
@@ -188,7 +203,6 @@ document.addEventListener("change", function (e) {
   }
 });
 
-// 🔽 Expand/Collapse
 document.addEventListener("click", function (e) {
   if (e.target.classList.contains("toggle-details")) {
     const detailsId = e.target.dataset.detailsId;
@@ -203,5 +217,4 @@ document.addEventListener("click", function (e) {
   }
 });
 
-// 🚀 Init
 fetchProfiles();
