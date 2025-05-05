@@ -10,26 +10,24 @@ function toTitleCase(str) {
 function normalizeCaste(rawCaste) {
   const casteStr = (rawCaste || "Unknown").toLowerCase().replace(/[^a-z0-9\s]/gi, "").trim();
 
+  // Group all Gavara-related entries under one label
+  if (casteStr.includes("gavara")) return "Gavara";
+
   const knownCastes = [
-    "gavara", "gavarapalem", "bc d gavara", "gavara b c d", "bc-dgavara", "gavara group d",
-    "viswabrahmins", "koppela velama", "padmanayaka velama", "bcd", "kaikala", "velama", "naidu", "reddy",
-    "kapu", "yadav", "kamma", "balija", "vysya", "muslim", "christian", "sc", "st", "bc", "oc"
+    "gavarapalem", "viswabrahmins", "koppela velama", "padmanayaka velama",
+    "bcd", "kaikala", "velama", "naidu", "reddy", "kapu", "yadav",
+    "kamma", "balija", "vysya", "muslim", "christian", "sc", "st", "bc", "oc"
   ];
 
-  let matchedCaste = "Unknown";
   for (const caste of knownCastes) {
     if (casteStr.includes(caste.replace(/[^a-z0-9]/gi, ""))) {
-      matchedCaste = toTitleCase(caste);
-      break;
+      return toTitleCase(caste);
     }
   }
 
-  const tagRegex = /(b\.?c\.?[-\s]?[abcd])/i;
-  const match = casteStr.match(tagRegex);
-  const bcTag = match ? match[0].toUpperCase().replace(/[^A-Z]/g, "") : null;
-
-  return bcTag ? `${matchedCaste} (BC-${bcTag.slice(-1)})` : matchedCaste;
+  return toTitleCase(casteStr);
 }
+
 
 async function fetchProfiles() {
   try {
