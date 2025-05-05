@@ -20,6 +20,7 @@ async function fetchProfiles() {
   }
 }
 
+// 📊 Stats with normalized caste values
 function renderStats(data) {
   let statsContainer = document.getElementById("stats-container");
   if (!statsContainer) {
@@ -34,7 +35,8 @@ function renderStats(data) {
   let totalFemales = 0;
 
   data.forEach(profile => {
-    const caste = toTitleCase(profile.caste || "Unknown");
+    const casteRaw = (profile.caste || "Unknown").trim().toLowerCase();
+    const caste = toTitleCase(casteRaw);
     if (!casteCounts[caste]) casteCounts[caste] = { male: 0, female: 0 };
     const gender = (profile.gender || '').toLowerCase();
     if (gender === "male") {
@@ -62,25 +64,28 @@ function renderStats(data) {
   `;
 }
 
+// 🧾 Render profiles grouped by normalized caste
 function renderProfiles(filter = "") {
   const container = document.getElementById("profiles-container");
   container.innerHTML = "";
 
   const casteGroups = {};
   window.allProfiles.forEach((profile, index) => {
-    const caste = toTitleCase(profile.caste || "Unknown");
-    if (!casteGroups[caste]) casteGroups[caste] = [];
+    const casteRaw = (profile.caste || "Unknown").trim().toLowerCase();
+    const casteDisplay = toTitleCase(casteRaw);
+    if (!casteGroups[casteRaw]) casteGroups[casteRaw] = { display: casteDisplay, profiles: [] };
     profile.index = index;
-    casteGroups[caste].push(profile);
+    casteGroups[casteRaw].profiles.push(profile);
   });
 
-  for (const caste in casteGroups) {
+  for (const key in casteGroups) {
+    const group = casteGroups[key];
     const div = document.createElement("div");
     div.classList.add("caste-category");
-    div.innerHTML = `<h2>${caste}</h2>`;
+    div.innerHTML = `<h2>${group.display}</h2>`;
 
     const table = document.createElement("table");
-    const filteredProfiles = casteGroups[caste].filter(p =>
+    const filteredProfiles = group.profiles.filter(p =>
       !filter || Object.values(p).join(" ").toLowerCase().includes(filter)
     );
 
@@ -132,6 +137,7 @@ function renderProfiles(filter = "") {
   }
 }
 
+// 📌 Helpers for sharing profiles
 function getSelectedProfiles() {
   return window.allProfiles.filter((_, i) => selectedIndices.has(i));
 }
