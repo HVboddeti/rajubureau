@@ -1,0 +1,155 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Noto+Sans+Telugu:wght@400;600;700&family=Outfit:wght@300;400;500;600;700;800&display=swap');
+
+:root {
+  /* Pearl & Saffron Palette */
+  --pearl:       #FEFAF4;
+  --pearl-warm:  #FDF5E8;
+  --saffron:     #F59E0B;
+  --saffron-deep:#D97706;
+  --saffron-glow:rgba(245,158,11,0.18);
+  --amber:       #FBBF24;
+  --amber-pale:  #FFFBEB;
+  --terra:       #C2410C;  /* terracotta accent */
+  --terra-pale:  #FFF7F3;
+  --gold:        #B45309;
+  --jade:        #047857;
+  --jade-pale:   #ECFDF5;
+  --blush:       #E11D48;
+  --blush-pale:  #FFF1F2;
+
+  --ink:         #1C0A00;
+  --ink-soft:    #6B4226;
+  --ink-muted:   #A87E5B;
+  --divider:     rgba(180,83,9,0.15);
+
+  --shadow-warm: 0 12px 48px rgba(245,158,11,0.15);
+  --shadow-card: 0 4px 20px rgba(28,10,0,0.07);
+  --shadow-float:0 20px 60px rgba(28,10,0,0.12);
+
+  --r-sm: 14px; --r: 22px; --r-lg: 32px;
+
+  /* Kolam pattern */
+  --kolam: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' stroke='rgba(245,158,11,0.08)' stroke-width='1'%3E%3Ccircle cx='20' cy='20' r='8'/%3E%3Ccircle cx='20' cy='20' r='15'/%3E%3Cline x1='20' y1='5' x2='20' y2='35'/%3E%3Cline x1='5' y1='20' x2='35' y2='20'/%3E%3Cline x1='9' y1='9' x2='31' y2='31'/%3E%3Cline x1='31' y1='9' x2='9' y2='31'/%3E%3C/g%3E%3C/svg%3E");
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Outfit', sans-serif;
+  background: var(--pearl);
+  color: var(--ink);
+  min-height: 100vh;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Atmospheric background */
+body::before {
+  content: '';
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background:
+    radial-gradient(ellipse 70% 55% at 15% 0%,   rgba(245,158,11,0.13) 0%, transparent 65%),
+    radial-gradient(ellipse 55% 45% at 85% 95%,  rgba(194,65,12,0.09)  0%, transparent 65%),
+    radial-gradient(ellipse 40% 60% at 80% 20%,  rgba(251,191,36,0.07) 0%, transparent 55%);
+}
+body::after {
+  content: '';
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background-image: var(--kolam);
+  background-size: 40px 40px;
+  opacity: 1;
+}
+
+/* ── Decorative border stripe ── */
+.stripe {
+  height: 5px;
+  background: repeating-linear-gradient(90deg,
+    var(--saffron) 0 16px, var(--terra) 16px 32px,
+    var(--amber) 32px 48px, var(--jade) 48px 64px);
+  position: relative; z-index: 10;
+}
+
+/* ── Typography ── */
+.serif       { font-family: 'Cormorant Garamond', serif; }
+.telugu      { font-family: 'Noto Sans Telugu', sans-serif; }
+.sans        { font-family: 'Outfit', sans-serif; }
+
+/* ── Shared Card ── */
+.card {
+  background: white;
+  border-radius: var(--r);
+  border: 1.5px solid var(--divider);
+  box-shadow: var(--shadow-card);
+  position: relative; overflow: hidden;
+  transition: transform .25s cubic-bezier(.34,1.56,.64,1), box-shadow .25s;
+}
+.card:hover { transform: translateY(-3px); box-shadow: var(--shadow-warm); }
+
+/* ── Chip / Badge ── */
+.chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 4px 13px; border-radius: 50px;
+  font-size: 11px; font-weight: 700; letter-spacing: .6px; text-transform: uppercase;
+}
+.chip-saffron { background: var(--amber-pale); color: var(--gold); border: 1px solid rgba(180,83,9,.18); }
+.chip-jade    { background: var(--jade-pale);  color: var(--jade); border: 1px solid rgba(4,120,87,.18); }
+.chip-terra   { background: var(--terra-pale); color: var(--terra); border: 1px solid rgba(194,65,12,.18); }
+.chip-blush   { background: var(--blush-pale); color: var(--blush); border: 1px solid rgba(225,29,72,.18); }
+
+/* ── Buttons ── */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 12px 24px; border-radius: 50px; border: none; cursor: pointer;
+  font-family: 'Outfit', sans-serif; font-size: 15px; font-weight: 700;
+  transition: transform .2s, box-shadow .2s, background .2s;
+  text-decoration: none;
+}
+.btn:hover { transform: translateY(-2px); }
+.btn-saffron {
+  background: linear-gradient(135deg, var(--saffron), var(--saffron-deep));
+  color: white; box-shadow: 0 4px 16px rgba(245,158,11,.35);
+}
+.btn-saffron:hover { box-shadow: 0 8px 24px rgba(245,158,11,.45); }
+.btn-jade {
+  background: linear-gradient(135deg, #059669, var(--jade));
+  color: white; box-shadow: 0 4px 16px rgba(4,120,87,.3);
+}
+.btn-wa {
+  background: linear-gradient(135deg, #22C55E, #16A34A);
+  color: white; box-shadow: 0 4px 16px rgba(34,197,94,.3);
+}
+.btn-sms {
+  background: linear-gradient(135deg, #3B82F6, #2563EB);
+  color: white; box-shadow: 0 4px 16px rgba(59,130,246,.3);
+}
+.btn-ghost {
+  background: white; color: var(--ink-soft);
+  border: 1.5px solid var(--divider);
+}
+.btn-ghost:hover { border-color: var(--saffron); color: var(--gold); background: var(--amber-pale); }
+
+/* ── Animations ── */
+@keyframes float-lotus {
+  0%,100% { transform: translateY(0) rotate(-3deg) scale(1); }
+  50%      { transform: translateY(-14px) rotate(3deg) scale(1.04); }
+}
+@keyframes pulse-ring {
+  0%   { box-shadow: 0 0 0 0 var(--saffron-glow); }
+  70%  { box-shadow: 0 0 0 16px transparent; }
+  100% { box-shadow: 0 0 0 0 transparent; }
+}
+@keyframes fade-up {
+  from { opacity:0; transform: translateY(20px); }
+  to   { opacity:1; transform: translateY(0); }
+}
+@keyframes shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position:  200% center; }
+}
+@keyframes shake {
+  0%,100%{transform:translateX(0)}20%,60%{transform:translateX(-7px)}40%,80%{transform:translateX(7px)}
+}
+
+.fade-up { animation: fade-up .6s ease both; }
+.fade-up-2 { animation: fade-up .6s .15s ease both; }
+.fade-up-3 { animation: fade-up .6s .30s ease both; }

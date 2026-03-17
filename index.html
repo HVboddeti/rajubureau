@@ -1,31 +1,341 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="te">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Marriage Bureau Dashboard</title>
-  <link rel="stylesheet" href="style.css" />
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>బోద్దేటి రాజు వివాహ మేళా</title>
+<link rel="stylesheet" href="css/theme.css"/>
+<style>
+/* ─ HERO ─ */
+.hero {
+  position: relative; z-index: 2;
+  text-align: center;
+  padding: 56px 24px 40px;
+}
+.live-pill {
+  display: inline-flex; align-items: center; gap: 7px;
+  background: white; border: 1.5px solid var(--divider);
+  border-radius: 50px; padding: 5px 16px;
+  font-size: 11px; font-weight: 700; color: var(--ink-soft);
+  letter-spacing: .5px; text-transform: uppercase;
+  box-shadow: var(--shadow-card); margin-bottom: 28px;
+}
+.live-dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--jade); animation: pulse-ring 2s infinite;
+}
+
+.lotus-wrap { margin-bottom: 18px; }
+.lotus-emoji {
+  font-size: 80px; line-height: 1; display: inline-block;
+  animation: float-lotus 5s ease-in-out infinite;
+  filter: drop-shadow(0 6px 20px rgba(245,158,11,.4));
+}
+
+.hero-name-te {
+  font-family: 'Noto Sans Telugu', sans-serif;
+  font-size: clamp(28px,7vw,52px); font-weight: 700;
+  color: var(--gold); line-height: 1.25;
+  text-shadow: 0 2px 0 rgba(180,83,9,.15);
+}
+.hero-name-en {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(15px,3vw,22px); color: var(--ink-soft);
+  margin-top: 6px; font-style: italic; font-weight: 400;
+  letter-spacing: .5px;
+}
+
+/* STATS STRIP */
+.stats-strip {
+  display: flex; justify-content: center;
+  margin: 28px auto 0; max-width: 440px;
+  background: white; border-radius: var(--r);
+  border: 1.5px solid var(--divider);
+  box-shadow: var(--shadow-card); overflow: hidden;
+}
+.stat { flex:1; padding: 18px 6px; text-align: center; border-right: 1px solid var(--divider); }
+.stat:last-child { border-right: none; }
+.stat-n {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 32px; font-weight: 700; color: var(--saffron-deep); line-height: 1;
+}
+.stat-l { font-size: 10px; color: var(--ink-muted); font-weight: 600; text-transform: uppercase; letter-spacing: .5px; margin-top: 4px; }
+
+/* ─ SECTION DIVIDER ─ */
+.section-div {
+  display: flex; align-items: center; gap: 14px;
+  max-width: 480px; margin: 40px auto 28px; padding: 0 24px;
+}
+.div-line { flex:1; height:1px; background: var(--divider); }
+.div-label {
+  font-size: 11px; color: var(--ink-muted); font-weight: 700;
+  text-transform: uppercase; letter-spacing: 1px; white-space: nowrap;
+}
+
+/* ─ PATH GRID ─ */
+.paths {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 14px; max-width: 580px; margin: 0 auto;
+  padding: 0 20px; position: relative; z-index: 2;
+}
+@media(max-width:480px){ .paths { grid-template-columns: 1fr; } }
+
+.path-card {
+  border-radius: var(--r); padding: 28px 22px;
+  display: flex; flex-direction: column; gap: 0;
+  text-decoration: none; color: var(--ink);
+  border: 2px solid transparent; cursor: pointer;
+  background: white; text-align: left; width: 100%;
+  font-family: 'Outfit', sans-serif;
+  position: relative; overflow: hidden;
+  box-shadow: var(--shadow-card);
+  transition: transform .3s cubic-bezier(.34,1.56,.64,1), box-shadow .3s, border-color .2s;
+}
+.path-card:hover { transform: translateY(-6px) scale(1.02); box-shadow: var(--shadow-warm); }
+
+/* per-card tints */
+.path-card.register {
+  background: linear-gradient(150deg, #FFFCF5 0%, var(--amber-pale) 100%);
+  border-color: rgba(245,158,11,.25);
+}
+.path-card.register:hover { border-color: var(--saffron); }
+.path-card.smart {
+  background: linear-gradient(150deg, #F0FFF9 0%, var(--jade-pale) 100%);
+  border-color: rgba(4,120,87,.2);
+}
+.path-card.smart:hover { border-color: var(--jade); }
+.path-card.dashboard {
+  background: linear-gradient(150deg, #FFF7F3 0%, #FFE8DD 100%);
+  border-color: rgba(194,65,12,.2);
+  grid-column: 1 / -1;
+}
+.path-card.dashboard:hover { border-color: var(--terra); }
+
+/* orb decoration */
+.path-card::after {
+  content:''; position:absolute; top:-28px; right:-28px;
+  width:90px; height:90px; border-radius:50%; opacity:.12;
+  transition: transform .3s, opacity .3s;
+}
+.path-card:hover::after { transform:scale(1.5); opacity:.2; }
+.register::after   { background: var(--amber); }
+.smart::after      { background: var(--jade); }
+.dashboard::after  { background: var(--terra); }
+
+.path-icon { font-size: 48px; line-height: 1; margin-bottom: 14px; display: block; }
+.path-tag  { margin-bottom: 10px; }
+
+.path-title-te {
+  font-family: 'Noto Sans Telugu', sans-serif;
+  font-size: 17px; font-weight: 700; color: var(--ink);
+}
+.path-title-en {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 14px; color: var(--ink-soft); margin-top: 2px; font-style: italic;
+}
+.path-desc { font-size: 12px; color: var(--ink-muted); margin-top: 10px; line-height: 1.65; }
+
+.path-arrow {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 34px; height: 34px; border-radius: 50%; margin-top: 18px; font-size: 16px;
+  transition: transform .2s;
+}
+.path-card:hover .path-arrow { transform: translateX(5px); }
+.register .path-arrow  { background: rgba(245,158,11,.15); color: var(--saffron-deep); }
+.smart    .path-arrow  { background: rgba(4,120,87,.15); color: var(--jade); }
+.dashboard .path-arrow { background: rgba(194,65,12,.15); color: var(--terra); }
+
+/* dashboard row layout */
+.dash-row { display: flex; align-items: center; gap: 16px; }
+.lock-pill {
+  flex-shrink:0; background: rgba(194,65,12,.1);
+  border:1px solid rgba(194,65,12,.2); border-radius:14px;
+  padding:10px 14px; text-align:center;
+}
+.lock-pill-icon { font-size:24px; }
+.lock-pill-txt  { font-size:10px; color:var(--terra); font-weight:700; text-transform:uppercase; letter-spacing:.5px; margin-top:2px; }
+
+/* ─ CONTACT BAR ─ */
+.contact-bar {
+  max-width: 580px; margin: 28px auto 0; padding: 0 20px;
+  position: relative; z-index: 2;
+}
+.contact-inner {
+  background: white; border-radius: var(--r);
+  border: 1.5px solid var(--divider); box-shadow: var(--shadow-card);
+  padding: 20px 22px;
+  display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+}
+.contact-avi { font-size: 48px; }
+.contact-info { flex:1; min-width:0; }
+.contact-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 20px; font-weight: 700; color: var(--gold);
+}
+.contact-num {
+  font-size: 22px; font-weight: 800; color: var(--ink); letter-spacing: 1px; margin-top: 2px;
+}
+.contact-sub { font-size: 12px; color: var(--ink-muted); margin-top: 2px; }
+
+/* ─ FOOTER ─ */
+.footer {
+  text-align: center; padding: 32px 20px 36px;
+  font-size: 12px; color: var(--ink-muted);
+  position: relative; z-index: 2;
+}
+
+/* suggestion box */
+.suggest-box {
+  max-width:580px; margin:20px auto 0; padding:0 20px; position:relative; z-index:2;
+}
+.suggest-inner {
+  background: linear-gradient(135deg, #FFFBEB, #FFF7F3);
+  border:1.5px dashed rgba(245,158,11,.35);
+  border-radius:var(--r); padding:18px 22px;
+}
+.suggest-title { font-weight:700; color:var(--gold); font-size:14px; margin-bottom:10px; }
+.suggest-list { list-style:none; display:flex; flex-direction:column; gap:8px; }
+.suggest-list li { font-size:13px; color:var(--ink-soft); display:flex; gap:8px; align-items:flex-start; line-height:1.5; }
+</style>
 </head>
 <body>
-  <h1>Advocate Boddeti Raju's Marriage Bureau Dashboard</h1>
+<div class="stripe fade-up"></div>
 
-  <div class="share-buttons">
-    <a href="https://wa.me/?text=Boddeti Raju Marriage Bureau has successfully completed 26 years of free service, facilitating over 2,100 marriages. This service is completely free of cost. For more profiles, feel free to reach out to me and please fill out this form: https://docs.google.com/forms/d/e/1FAIpQLScdkDc5cqemXc23vy4DYUPWxjYx5H6vXLdtoIQ01RH3Bg-6VQ/viewform?usp=sharing" target="_blank">💬 Share Link via WhatsApp</a>
-    <a href="sms:?body=Boddeti Raju Marriage Bureau has successfully completed 26 years of free service, facilitating over 2,100 marriages. This service is completely free of cost. For more profiles, feel free to reach out to me and please fill out this form: https://docs.google.com/forms/d/e/1FAIpQLScdkDc5cqemXc23vy4DYUPWxjYx5H6vXLdtoIQ01RH3Bg-6VQ/viewform?usp=sharing" target="_blank">📱 Share Link via SMS</a>
+<div class="hero">
+  <div class="live-pill fade-up">
+    <div class="live-dot"></div>
+    ఉచిత వివాహ సేవ · Free Marriage Service
   </div>
-
-  <div class="top-dashboard">
-    <input type="text" id="searchBar" class="search-bar" placeholder="Search profiles..." />
+  <div class="lotus-wrap fade-up-2">
+    <span class="lotus-emoji">🪷</span>
   </div>
+  <div class="hero-name-te fade-up-2">బోద్దేటి రాజు వివాహ మేళా</div>
+  <div class="hero-name-en fade-up-3">Advocate Boddeti Raju · Marriage Bureau</div>
 
-  <!-- 👇 Responsive table wrapper -->
-  <div id="profiles-container" class="responsive-table"></div>
-
-  <div class="share-options">
-    <button onclick="shareSelectedWhatsApp()">Share Profile via WhatsApp</button>
-    <button onclick="shareSelectedSMS()">Share Profile via SMS</button>
+  <div class="stats-strip fade-up-3">
+    <div class="stat"><div class="stat-n">26+</div><div class="stat-l">సంవత్సరాలు</div></div>
+    <div class="stat"><div class="stat-n">2100+</div><div class="stat-l">వివాహాలు</div></div>
+    <div class="stat"><div class="stat-n">ఉచిత</div><div class="stat-l">సేవ</div></div>
   </div>
+</div>
 
-  <script src="script.js"></script>
+<div class="section-div fade-up-3">
+  <div class="div-line"></div>
+  <div class="div-label">మీకు ఏమి కావాలి? · What do you need?</div>
+  <div class="div-line"></div>
+</div>
+
+<div class="paths">
+
+  <a class="path-card register fade-up" href="pages/register.html">
+    <span class="path-icon">📝</span>
+    <span class="path-tag"><span class="chip chip-saffron">Manual</span></span>
+    <div class="path-title-te">స్వయంగా నమోదు</div>
+    <div class="path-title-en">Manual Registration</div>
+    <div class="path-desc">Fill each field step-by-step in Telugu & English.</div>
+    <div class="path-arrow">→</div>
+  </a>
+
+  <a class="path-card smart fade-up" href="pages/smart-entry.html">
+    <span class="path-icon">🤖</span>
+    <span class="path-tag"><span class="chip chip-jade">AI Smart</span></span>
+    <div class="path-title-te">AI స్మార్ట్ ఎంట్రీ</div>
+    <div class="path-title-en">Paste · Voice · Photo</div>
+    <div class="path-desc">Paste WhatsApp text, speak Telugu, or photograph a biodata.</div>
+    <div class="path-arrow">→</div>
+  </a>
+
+  <button class="path-card dashboard fade-up-2" type="button" onclick="openDashboard()">
+    <div class="dash-row">
+      <div style="flex:1">
+        <span class="path-icon">🗂️</span>
+        <span class="path-tag"><span class="chip chip-terra">Private · Boddeti Raju Only</span></span>
+        <div class="path-title-te">ప్రొఫైల్స్ డాష్‌బోర్డ్</div>
+        <div class="path-title-en">Browse, Search & Share Profiles</div>
+        <div class="path-desc">View all profiles, filter by caste/gender, share with photo via WhatsApp.</div>
+        <div class="path-arrow">→</div>
+      </div>
+      <div class="lock-pill">
+        <div class="lock-pill-icon">🔐</div>
+        <div class="lock-pill-txt">Verified<br>Access</div>
+      </div>
+    </div>
+  </button>
+
+</div>
+
+<!-- SUGGESTIONS -->
+<div class="suggest-box fade-up-3">
+  <div class="suggest-inner">
+    <div class="suggest-title">💡 My Suggestions for You, Boddeti Raju</div>
+    <ul class="suggest-list">
+      <li>📸 <span><strong>Share Form Page</strong> — tap "Share Registration Link" in the dashboard to send the form to anyone, they see only registration options.</span></li>
+      <li>🖼️ <span><strong>Profile photos</strong> are now included as clickable links in every WhatsApp/SMS share — recipients can open and view the photo directly.</span></li>
+      <li>🔍 <span><strong>Search by father's name</strong> — already works! Type the father's name in the search box inside the dashboard.</span></li>
+      <li>📋 <span><strong>Copy biodata image</strong> — in the dashboard, long-press any profile photo to copy/save it before sharing.</span></li>
+    </ul>
+  </div>
+</div>
+
+<div class="contact-bar fade-up-3">
+  <div class="contact-inner">
+    <div class="contact-avi">👨‍⚖️</div>
+    <div class="contact-info">
+      <div class="contact-name">Advocate Boddeti Raju</div>
+      <div class="contact-num">+91 90523 69813</div>
+      <div class="contact-sub">26+ years · 2100+ marriages · Free service</div>
+    </div>
+    <a class="btn btn-wa" href="https://wa.me/919052369813" target="_blank">💬 WhatsApp</a>
+  </div>
+</div>
+
+<div class="footer">
+  🪷 Boddeti Raju Marriage Bureau · ఉచిత సేవ · Free Service Since 1998
+</div>
+<div class="stripe"></div>
+
+<script>
+(function(){
+  const allowedNumbers = {
+    "+919052369813": "1234",
+    "+919876543210": "5678"
+  };
+  const storageKey = "raju_private_verified";
+
+  function isVerified() {
+    return localStorage.getItem(storageKey) === "true";
+  }
+
+  function normalizeNumber(value) {
+    return (value || "").trim().replace(/\s+/g, "");
+  }
+
+  window.openDashboard = function() {
+    if (isVerified()) {
+      window.location.href = "pages/dashboard.html";
+      return;
+    }
+
+    const enteredNumber = normalizeNumber(prompt("Enter your mobile number (e.g. +919052369813):"));
+    if (!enteredNumber) return;
+
+    if (!allowedNumbers.hasOwnProperty(enteredNumber)) {
+      alert("Access denied. This section is restricted to authorized numbers only.");
+      return;
+    }
+
+    const code = allowedNumbers[enteredNumber];
+    alert("Verification code sent to " + enteredNumber + " (demo code: " + code + ")");
+
+    const enteredCode = prompt("Enter the verification code:");
+    if (enteredCode === code) {
+      localStorage.setItem(storageKey, "true");
+      window.location.href = "pages/dashboard.html";
+    } else {
+      alert("Incorrect code. Access denied.");
+    }
+  };
+})();
+</script>
 </body>
 </html>

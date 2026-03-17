@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="te">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>నమోదు చేయండి · Register Now · Raju Bureau</title>
+<link rel="stylesheet" href="../css/theme.css"/>
+<style>
+.hero {
+  position: relative; z-index: 2;
+  text-align: center; padding: 52px 24px 36px;
+}
+.back-btn {
+  position: absolute; top: 16px; left: 16px; z-index: 10;
+  background: white; border: 1.5px solid var(--divider);
+  border-radius: 50px; padding: 7px 16px;
+  font-size: 13px; font-weight: 600; color: var(--ink-soft);
+  text-decoration: none; box-shadow: var(--shadow-card);
+  display: inline-flex; align-items: center; gap: 6px;
+  transition: all .2s;
+}
+.back-btn:hover { border-color: var(--saffron); color: var(--gold); background: var(--amber-pale); }
+
+.lotus { font-size: 64px; display: block; margin: 0 auto 16px;
+  animation: float-lotus 5s ease-in-out infinite;
+  filter: drop-shadow(0 4px 16px rgba(245,158,11,.35));
+}
+.hero-title-te {
+  font-family: 'Noto Sans Telugu', sans-serif;
+  font-size: clamp(22px,5vw,36px); font-weight: 700; color: var(--gold); line-height: 1.3;
+}
+.hero-title-en {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(14px,2.5vw,20px); color: var(--ink-soft); font-style: italic; margin-top: 6px;
+}
+.hero-sub {
+  font-size: 14px; color: var(--ink-muted); margin-top: 12px; line-height: 1.6;
+  max-width: 380px; margin-left: auto; margin-right: auto;
+}
+
+/* FORM OPTIONS */
+.form-options {
+  display: flex; flex-direction: column; gap: 16px;
+  max-width: 480px; margin: 0 auto; padding: 0 20px;
+  position: relative; z-index: 2;
+}
+
+.form-card {
+  border-radius: var(--r-lg);
+  padding: 32px 28px;
+  display: flex; align-items: center; gap: 20px;
+  text-decoration: none; color: var(--ink);
+  border: 2px solid transparent;
+  box-shadow: var(--shadow-card);
+  transition: transform .3s cubic-bezier(.34,1.56,.64,1), box-shadow .3s, border-color .2s;
+  position: relative; overflow: hidden;
+  cursor: pointer;
+}
+.form-card:hover { transform: translateY(-5px) scale(1.02); box-shadow: var(--shadow-warm); }
+
+.form-card.manual {
+  background: linear-gradient(145deg, #FFFCF5, var(--amber-pale));
+  border-color: rgba(245,158,11,.25);
+}
+.form-card.manual:hover { border-color: var(--saffron); }
+
+.form-card.ai {
+  background: linear-gradient(145deg, #F0FFF9, var(--jade-pale));
+  border-color: rgba(4,120,87,.2);
+}
+.form-card.ai:hover { border-color: var(--jade); }
+
+.form-card::before {
+  content:''; position:absolute; bottom:-20px; right:-20px;
+  width:80px; height:80px; border-radius:50%; opacity:.1;
+  transition: transform .3s;
+}
+.form-card:hover::before { transform: scale(2); opacity:.2; }
+.manual::before { background: var(--amber); }
+.ai::before     { background: var(--jade); }
+
+.fcard-icon { font-size: 56px; line-height: 1; flex-shrink: 0; }
+.fcard-body { flex: 1; }
+.fcard-tag { margin-bottom: 8px; }
+.fcard-title-te {
+  font-family: 'Noto Sans Telugu', sans-serif;
+  font-size: 20px; font-weight: 700; color: var(--ink); line-height: 1.3;
+}
+.fcard-title-en {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 15px; color: var(--ink-soft); font-style: italic; margin-top: 2px;
+}
+.fcard-desc { font-size: 13px; color: var(--ink-muted); margin-top: 10px; line-height: 1.6; }
+.fcard-arrow {
+  width: 40px; height: 40px; border-radius: 50%; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; transition: transform .2s;
+}
+.form-card:hover .fcard-arrow { transform: translateX(5px); }
+.manual .fcard-arrow { background: rgba(245,158,11,.15); color: var(--saffron-deep); }
+.ai     .fcard-arrow { background: rgba(4,120,87,.15); color: var(--jade); }
+
+/* CONTACT */
+.contact-section {
+  max-width: 480px; margin: 28px auto; padding: 0 20px;
+  position: relative; z-index: 2;
+}
+.contact-box {
+  background: white; border-radius: var(--r);
+  border: 1.5px solid var(--divider); box-shadow: var(--shadow-card);
+  padding: 20px 22px; text-align: center;
+}
+.contact-box-top { font-family: 'Cormorant Garamond', serif; font-size: 18px; font-weight: 700; color: var(--gold); }
+.contact-box-num { font-size: 24px; font-weight: 800; color: var(--ink); letter-spacing: 1px; margin-top: 4px; }
+.contact-box-sub { font-size: 12px; color: var(--ink-muted); margin: 6px 0 16px; }
+.contact-box-btns { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+
+.footer { text-align:center; padding:24px 20px 32px; font-size:12px; color:var(--ink-muted); position:relative; z-index:2; }
+
+/* FOUNDER SECTION */
+.founder-section {
+  max-width: 440px; margin: 0 auto 28px;
+  background: white; border-radius: 22px;
+  box-shadow: 0 6px 32px rgba(245,158,11,.18);
+  border: 2px solid rgba(245,158,11,.22);
+  overflow: hidden;
+}
+/* SLIDESHOW */
+.slideshow {
+  position: relative; width: 100%; height: 240px;
+  overflow: hidden; background: #1a1a1a;
+}
+.slide {
+  position: absolute; inset: 0;
+  opacity: 0; transition: opacity 0.8s ease;
+}
+.slide.active { opacity: 1; }
+.slide img {
+  width: 100%; height: 100%;
+  object-fit: cover; object-position: center top;
+  display: block;
+}
+.slide-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(0,0,0,.55) 0%, transparent 55%);
+}
+.slide-dots {
+  position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%);
+  display: flex; gap: 6px; z-index: 2;
+}
+.dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: rgba(255,255,255,.45); cursor: pointer;
+  transition: background .3s, transform .3s;
+}
+.dot.active { background: var(--saffron); transform: scale(1.3); }
+.slide-badge {
+  position: absolute; top: 12px; right: 12px; z-index: 2;
+  background: rgba(245,158,11,.9); color: white;
+  font-size: 10px; font-weight: 700; border-radius: 20px;
+  padding: 4px 10px; letter-spacing: .5px; backdrop-filter: blur(4px);
+}
+/* FOUNDER INFO */
+.founder-info-box {
+  padding: 16px 20px 18px;
+  display: flex; align-items: center; gap: 14px;
+}
+.founder-avatar {
+  width: 56px; height: 56px; flex-shrink: 0;
+  border-radius: 50%; overflow: hidden;
+  border: 3px solid var(--saffron);
+  box-shadow: 0 0 0 3px rgba(245,158,11,.2);
+}
+.founder-avatar img { width:100%; height:100%; object-fit:cover; object-position: center top; }
+.founder-text { flex: 1; }
+.founder-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 19px; font-weight: 700; color: var(--gold); line-height: 1.2;
+}
+.founder-title {
+  font-size: 12px; color: var(--ink-soft); margin: 2px 0 8px;
+  font-family: 'Noto Sans Telugu', sans-serif;
+}
+.founder-chips { display: flex; gap: 6px; flex-wrap: wrap; }
+.founder-chips span {
+  font-size: 10px; font-weight: 700; color: var(--terracotta);
+  background: var(--amber-pale); border-radius: 20px; padding: 3px 10px;
+}
+</style>
+</head>
+<body>
+<div class="stripe"></div>
+
+<div class="hero">
+  <a class="back-btn" href="../index.html">← Home</a>
+
+  <!-- DAD'S PHOTO GALLERY -->
+  <div class="founder-section fade-up">
+    <div class="slideshow" id="slideshow">
+      <div class="slide-badge">📸 Boddeti Raju</div>
+      <div class="slide active"><img src="../images/dad1.jpg" alt="Boddeti Raju"/><div class="slide-overlay"></div></div>
+      <div class="slide"><img src="../images/dad2.jpg" alt="Boddeti Raju in newspaper"/><div class="slide-overlay"></div></div>
+      <div class="slide"><img src="../images/dad3.jpg" alt="Boddeti Raju newspaper feature"/><div class="slide-overlay"></div></div>
+      <div class="slide"><img src="../images/dad4.jpg" alt="Boddeti Raju Andhra Jyothi"/><div class="slide-overlay"></div></div>
+      <div class="slide"><img src="../images/dad5.jpg" alt="Boddeti Raju at event"/><div class="slide-overlay"></div></div>
+      <div class="slide"><img src="../images/dad6.jpg" alt="Boddeti Raju felicitation"/><div class="slide-overlay"></div></div>
+      <div class="slide-dots">
+        <div class="dot active" onclick="goSlide(0)"></div>
+        <div class="dot" onclick="goSlide(1)"></div>
+        <div class="dot" onclick="goSlide(2)"></div>
+        <div class="dot" onclick="goSlide(3)"></div>
+        <div class="dot" onclick="goSlide(4)"></div>
+        <div class="dot" onclick="goSlide(5)"></div>
+      </div>
+    </div>
+    <div class="founder-info-box">
+      <div class="founder-avatar">
+        <img src="../images/dad1.jpg" alt="Boddeti Raju"/>
+      </div>
+      <div class="founder-text">
+        <div class="founder-name">Adv. Boddeti Raju</div>
+        <div class="founder-title">న్యాయవాది · ఉచిత వివాహ బ్యూరో నిర్వాహకుడు</div>
+        <div class="founder-chips">
+          <span>⚖️ Advocate</span>
+          <span>🕐 26+ Years</span>
+          <span>💍 2100+ Marriages</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-title-te fade-up">నమోదు చేయండి</div>
+  <div class="hero-title-en fade-up-2">Register for Raju Bureau · Free Marriage Service</div>
+  <div class="hero-sub fade-up-3">
+    Please fill the form below to register your profile.
+  </div>
+</div>
+
+<div class="form-options">
+
+  <a class="form-card manual fade-up" href="register.html">
+    <div class="fcard-icon">📝</div>
+    <div class="fcard-body">
+      <div class="fcard-tag"><span class="chip chip-saffron">Step by Step</span></div>
+      <div class="fcard-title-te">సాధారణ ఫారం</div>
+      <div class="fcard-title-en">Manual Registration Form</div>
+      <div class="fcard-desc">Fill each field yourself in Telugu & English. Takes about 5 minutes.</div>
+    </div>
+    <div class="fcard-arrow">→</div>
+  </a>
+
+  <a class="form-card ai fade-up-2" href="smart-entry.html">
+    <div class="fcard-icon">🤖</div>
+    <div class="fcard-body">
+      <div class="fcard-tag"><span class="chip chip-jade">AI Powered</span></div>
+      <div class="fcard-title-te">AI స్మార్ట్ ఎంట్రీ</div>
+      <div class="fcard-title-en">Smart AI Entry</div>
+      <div class="fcard-desc">Paste a WhatsApp message, speak in Telugu, or photograph a printed biodata — AI fills everything automatically.</div>
+    </div>
+    <div class="fcard-arrow">→</div>
+  </a>
+
+</div>
+
+<div class="contact-section fade-up-3">
+  <div class="contact-box">
+    <div class="contact-box-top">👨‍⚖️ Advocate Boddeti Raju</div>
+    <div class="contact-box-num">+91 90523 69813</div>
+    <div class="contact-box-sub">Free service · 26+ years · 2100+ marriages · ఉచిత సేవ</div>
+    <div class="contact-box-btns">
+      <a class="btn btn-wa" href="https://wa.me/919052369813" target="_blank">💬 WhatsApp</a>
+      <a class="btn btn-ghost" href="tel:+919052369813">📞 Call</a>
+    </div>
+  </div>
+</div>
+
+<div class="footer">🪷 Boddeti Raju Marriage Bureau · ఉచిత సేవ · Free Service Since 1998</div>
+<div class="stripe"></div>
+
+<script>
+// Slideshow
+let cur = 0;
+const slides = document.querySelectorAll('.slide');
+const dots = document.querySelectorAll('.dot');
+
+function goSlide(n) {
+  slides[cur].classList.remove('active');
+  dots[cur].classList.remove('active');
+  cur = n;
+  slides[cur].classList.add('active');
+  dots[cur].classList.add('active');
+}
+
+// Auto-advance every 3 seconds
+setInterval(() => goSlide((cur + 1) % slides.length), 3000);
+
+// Swipe support
+let startX = 0;
+document.getElementById('slideshow').addEventListener('touchstart', e => startX = e.touches[0].clientX);
+document.getElementById('slideshow').addEventListener('touchend', e => {
+  const dx = e.changedTouches[0].clientX - startX;
+  if (Math.abs(dx) > 40) goSlide(dx < 0 ? (cur + 1) % slides.length : (cur - 1 + slides.length) % slides.length);
+});
+</script>
+</body>
+</html>

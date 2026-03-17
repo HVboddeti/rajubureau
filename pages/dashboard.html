@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Dashboard · Raju Bureau</title>
+<link rel="stylesheet" href="../css/theme.css"/>
+<style>
+/* ── LOCK SCREEN ── */
+#lock-screen {
+  position: fixed; inset: 0; z-index: 9999;
+  background: var(--pearl);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 28px;
+}
+#lock-screen::before {
+  content:''; position:fixed; inset:0; pointer-events:none;
+  background:
+    radial-gradient(ellipse 70% 55% at 15% 0%, rgba(245,158,11,.13) 0%, transparent 65%),
+    radial-gradient(ellipse 55% 45% at 85% 95%, rgba(194,65,12,.09) 0%, transparent 65%);
+  background-image: var(--kolam); background-size:40px 40px;
+}
+#lock-screen.hidden { display:none; }
+#app { display:none; }
+#app.visible { display:block; }
+
+.lock-lotus { font-size:80px; display:block; text-align:center;
+  animation: float-lotus 5s ease-in-out infinite;
+  filter: drop-shadow(0 6px 24px rgba(245,158,11,.35));
+  margin-bottom:10px; position:relative; z-index:1;
+}
+.lock-heading-te {
+  font-family:'Noto Sans Telugu',sans-serif;
+  font-size:clamp(20px,5vw,32px); font-weight:700;
+  color:var(--gold); text-align:center; position:relative; z-index:1;
+}
+.lock-heading-en {
+  font-family:'Cormorant Garamond',serif;
+  font-size:16px; color:var(--ink-soft); text-align:center;
+  font-style:italic; margin-top:4px; margin-bottom:28px; position:relative; z-index:1;
+}
+
+.lock-card {
+  background:white; border-radius:var(--r-lg); padding:32px 28px;
+  width:100%; max-width:400px;
+  box-shadow: 0 24px 64px rgba(245,158,11,.18), 0 4px 20px rgba(28,10,0,.08);
+  border:1.5px solid var(--divider); position:relative; z-index:1;
+}
+.lock-card-icon { text-align:center; font-size:40px; margin-bottom:10px; }
+.lock-card-title {
+  font-family:'Cormorant Garamond',serif;
+  font-size:22px; font-weight:700; color:var(--ink); text-align:center;
+}
+.lock-card-sub {
+  font-size:13px; color:var(--ink-muted); text-align:center;
+  line-height:1.6; margin-top:4px; margin-bottom:22px;
+}
+
+.lock-input-wrap { position:relative; margin-bottom:10px; }
+.lock-input-icon { position:absolute; left:16px; top:50%; transform:translateY(-50%); font-size:18px; }
+.lock-input {
+  width:100%; padding:15px 16px 15px 46px;
+  border:2px solid var(--divider); border-radius:var(--r-sm);
+  font-family:'Outfit',sans-serif; font-size:17px; color:var(--ink);
+  background:var(--pearl-warm); outline:none; letter-spacing:2px;
+  transition:border-color .2s, box-shadow .2s;
+}
+.lock-input:focus { border-color:var(--saffron); box-shadow:0 0 0 3px var(--saffron-glow); }
+.lock-input.err { border-color:var(--blush); background:var(--blush-pale); animation:shake .4s; }
+
+.lock-hint { font-size:11px; color:var(--ink-muted); text-align:center; margin-bottom:16px; }
+
+.lock-btn {
+  width:100%; padding:16px; border:none; border-radius:var(--r-sm);
+  background:linear-gradient(135deg, var(--saffron), var(--saffron-deep));
+  color:white; font-family:'Noto Sans Telugu','Outfit',sans-serif;
+  font-size:16px; font-weight:700; cursor:pointer;
+  box-shadow:0 6px 20px rgba(245,158,11,.3);
+  transition:transform .2s, box-shadow .2s;
+}
+.lock-btn:hover { transform:translateY(-2px); box-shadow:0 10px 28px rgba(245,158,11,.4); }
+.lock-btn:disabled { opacity:.5; cursor:not-allowed; transform:none; }
+
+.lock-error {
+  background:var(--blush-pale); border:1.5px solid rgba(225,29,72,.25);
+  border-radius:var(--r-sm); padding:10px 14px;
+  font-size:13px; color:var(--blush); text-align:center;
+  display:none; margin-top:10px; line-height:1.5;
+}
+.lock-blocked { display:none; margin-top:10px; text-align:center; }
+.lock-blocked-te { font-family:'Noto Sans Telugu',sans-serif; color:var(--blush); font-weight:700; font-size:14px; }
+.lock-blocked-en { font-size:11px; color:var(--ink-muted); margin-top:2px; }
+.lock-timer { font-family:'Cormorant Garamond',serif; font-size:30px; font-weight:700; color:var(--blush); }
+.lock-attempts { font-size:11px; color:var(--ink-muted); text-align:center; margin-top:8px; }
+
+/* ── HEADER ── */
+header {
+  position:sticky; top:0; z-index:100;
+  background:rgba(254,250,244,.94); backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--divider); padding:14px 20px;
+}
+.header-inner { max-width:920px; margin:0 auto; display:flex; align-items:center; gap:14px; }
+.hdr-lotus { font-size:30px; }
+.hdr-text h1 {
+  font-family:'Cormorant Garamond',serif;
+  font-size:20px; font-weight:700; color:var(--gold);
+}
+.hdr-text p { font-size:11px; color:var(--ink-muted); font-weight:500; }
+.hdr-btns { margin-left:auto; display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
+.hdr-btn {
+  padding:7px 14px; border-radius:50px; font-family:'Outfit',sans-serif;
+  font-size:13px; font-weight:600; cursor:pointer; text-decoration:none;
+  border:1.5px solid var(--divider); background:white; color:var(--ink-soft);
+  transition:all .2s; white-space:nowrap;
+  display:inline-flex; align-items:center; gap:5px;
+}
+.hdr-btn:hover { border-color:var(--saffron); color:var(--gold); background:var(--amber-pale); }
+.hdr-btn.share-form-btn {
+  background:linear-gradient(135deg,var(--saffron),var(--saffron-deep));
+  color:white; border-color:transparent;
+  box-shadow:0 3px 12px rgba(245,158,11,.3);
+}
+.hdr-btn.share-form-btn:hover { transform:translateY(-1px); box-shadow:0 6px 18px rgba(245,158,11,.4); }
+
+/* ── SECTION ── */
+.section { max-width:920px; margin:0 auto; padding:24px 16px; }
+
+.section-label {
+  display:inline-flex; align-items:center; gap:7px;
+  background:var(--amber-pale); border:1px solid rgba(180,83,9,.2);
+  border-radius:50px; padding:4px 14px;
+  font-size:11px; font-weight:700; color:var(--gold);
+  letter-spacing:.6px; text-transform:uppercase; margin-bottom:10px;
+}
+.section-title {
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(22px,4vw,30px); font-weight:700; color:var(--ink); margin-bottom:6px;
+}
+.section-sub { font-size:14px; color:var(--ink-muted); margin-bottom:18px; line-height:1.6; }
+
+/* SHARE FORM CALLOUT */
+.share-callout {
+  background:linear-gradient(135deg,#FFFCF0,var(--amber-pale));
+  border:2px solid rgba(245,158,11,.3); border-radius:var(--r);
+  padding:20px 22px; display:flex; align-items:center; gap:16px; flex-wrap:wrap;
+  margin-bottom:20px;
+}
+.share-callout-text h3 { font-family:'Cormorant Garamond',serif; font-size:18px; font-weight:700; color:var(--gold); }
+.share-callout-text p { font-size:13px; color:var(--ink-soft); margin-top:4px; line-height:1.5; }
+.share-callout-btns { display:flex; gap:8px; flex-wrap:wrap; margin-left:auto; }
+.sc-btn {
+  padding:10px 18px; border-radius:50px; border:none; cursor:pointer;
+  font-family:'Outfit',sans-serif; font-size:13px; font-weight:700;
+  display:inline-flex; align-items:center; gap:6px; white-space:nowrap;
+  transition:transform .2s, box-shadow .2s;
+}
+.sc-btn:hover { transform:translateY(-2px); }
+.sc-wa { background:linear-gradient(135deg,#22C55E,#16A34A); color:white; box-shadow:0 3px 12px rgba(34,197,94,.3); }
+.sc-copy { background:white; color:var(--ink-soft); border:1.5px solid var(--divider); }
+.sc-copy:hover { border-color:var(--saffron); color:var(--gold); background:var(--amber-pale); }
+
+/* STATS */
+.stats-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(110px,1fr)); gap:10px; }
+.stat-card {
+  background:white; border:1.5px solid var(--divider);
+  border-radius:var(--r-sm); padding:14px 10px; text-align:center;
+  box-shadow:var(--shadow-card); transition:transform .2s;
+}
+.stat-card:hover { transform:translateY(-2px); }
+.stat-card-n { font-family:'Cormorant Garamond',serif; font-size:28px; font-weight:700; color:var(--saffron-deep); line-height:1; }
+.stat-card-l { font-size:10px; color:var(--ink-muted); font-weight:700; text-transform:uppercase; letter-spacing:.5px; margin-top:4px; }
+.stats-loading { grid-column:1/-1; padding:20px; text-align:center; color:var(--ink-muted); font-size:14px; }
+
+/* SEARCH + FILTER */
+.search-row { display:flex; align-items:center; gap:10px; margin-bottom:12px; }
+.search-wrap {
+  flex:1; display:flex; align-items:center; gap:10px;
+  background:white; border:1.5px solid var(--divider);
+  border-radius:50px; padding:5px 18px;
+  box-shadow:var(--shadow-card); transition:border-color .2s, box-shadow .2s;
+}
+.search-wrap:focus-within { border-color:var(--saffron); box-shadow:0 0 0 3px var(--saffron-glow); }
+.search-icon { font-size:17px; opacity:.5; }
+.search-input {
+  flex:1; border:none; outline:none; font-family:'Outfit',sans-serif;
+  font-size:15px; color:var(--ink); padding:9px 0; background:transparent;
+}
+.filter-bar { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:18px; }
+.filter-btn {
+  padding:7px 18px; border-radius:50px; border:1.5px solid var(--divider);
+  background:white; font-family:'Outfit',sans-serif; font-size:13px; font-weight:600;
+  cursor:pointer; color:var(--ink-soft); transition:all .2s;
+}
+.filter-btn.active {
+  background:var(--ink); border-color:var(--ink); color:white;
+  box-shadow:0 3px 10px rgba(28,10,0,.2);
+}
+
+/* CASTE SECTION */
+.caste-group { margin-bottom:28px; }
+.caste-header { display:flex; align-items:center; gap:10px; margin-bottom:12px; padding-left:2px; }
+.caste-name { font-family:'Cormorant Garamond',serif; font-size:20px; font-weight:700; color:var(--gold); }
+.caste-cnt { background:var(--amber-pale); color:var(--gold); border:1px solid rgba(180,83,9,.2); font-size:11px; font-weight:700; padding:2px 10px; border-radius:20px; }
+
+/* PROFILE CARDS */
+.profile-card {
+  background:white; border-radius:var(--r); border:2px solid transparent;
+  box-shadow:var(--shadow-card); margin-bottom:10px;
+  transition:border-color .2s, box-shadow .2s, transform .2s; overflow:hidden;
+}
+.profile-card:hover { transform:translateY(-1px); box-shadow:var(--shadow-warm); }
+.profile-card.selected { border-color:var(--saffron); box-shadow:0 0 0 3px var(--saffron-glow); }
+
+/* CARD TOP ROW */
+.card-top { display:flex; align-items:center; gap:12px; padding:14px 16px; cursor:pointer; }
+
+.card-checkbox {
+  width:26px; height:26px; min-width:26px; border-radius:8px;
+  border:2px solid var(--divider); background:white;
+  display:flex; align-items:center; justify-content:center;
+  font-size:14px; cursor:pointer; transition:all .15s; flex-shrink:0;
+}
+.selected .card-checkbox { background:var(--saffron); border-color:var(--saffron); color:white; }
+
+.card-photo {
+  width:56px; height:56px; min-width:56px; border-radius:14px;
+  object-fit:cover; border:2px solid var(--divider); flex-shrink:0;
+}
+.card-avatar {
+  width:56px; height:56px; min-width:56px; border-radius:14px;
+  display:flex; align-items:center; justify-content:center;
+  font-size:26px; flex-shrink:0;
+}
+.card-avatar.m { background:linear-gradient(135deg,#EFF6FF,#DBEAFE); }
+.card-avatar.f { background:linear-gradient(135deg,#FFF1F6,#FFE4EF); }
+
+.card-info { flex:1; min-width:0; }
+.card-name { font-family:'Cormorant Garamond',serif; font-size:18px; font-weight:700; color:var(--ink); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.card-meta { font-size:12px; color:var(--ink-muted); margin-top:2px; }
+.card-chips { display:flex; gap:5px; flex-wrap:wrap; margin-top:7px; }
+.card-chip { font-size:10px; font-weight:600; padding:2px 8px; border-radius:20px; }
+.cc-edu  { background:var(--jade-pale);  color:var(--jade);  border:1px solid rgba(4,120,87,.18); }
+.cc-prof { background:var(--amber-pale); color:var(--gold);  border:1px solid rgba(180,83,9,.18); }
+.cc-loc  { background:var(--terra-pale); color:var(--terra); border:1px solid rgba(194,65,12,.18); }
+
+.expand-btn {
+  background:none; border:none; width:34px; height:34px; border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  cursor:pointer; color:var(--ink-muted); font-size:14px;
+  transition:all .2s; flex-shrink:0;
+}
+.expand-btn:hover { background:var(--amber-pale); color:var(--gold); }
+.expand-btn.open { transform:rotate(180deg); background:var(--amber-pale); color:var(--gold); }
+
+/* CARD DETAILS */
+.card-details { display:none; border-top:1px solid var(--divider); background:var(--pearl-warm); }
+.card-details.open { display:block; }
+
+/* PHOTO GALLERY inside card */
+.photo-gallery {
+  display:flex; gap:10px; padding:14px 16px; flex-wrap:wrap;
+  border-bottom:1px solid var(--divider);
+  align-items:center;
+}
+.photo-gallery-title { font-size:11px; font-weight:700; color:var(--ink-muted); text-transform:uppercase; letter-spacing:.5px; margin-right:4px; }
+.photo-thumb {
+  width:86px; height:86px; object-fit:cover; border-radius:12px;
+  border:2px solid var(--divider); cursor:pointer;
+  transition:transform .2s, box-shadow .2s;
+  box-shadow:var(--shadow-card);
+}
+.photo-thumb:hover { transform:scale(1.08); box-shadow:0 8px 20px rgba(28,10,0,.12); }
+.photo-no-img {
+  width:86px; height:86px; border-radius:12px;
+  border:2px dashed rgba(180,83,9,.25); background:var(--amber-pale);
+  display:flex; align-items:center; justify-content:center; font-size:30px;
+  color:var(--saffron);
+}
+
+/* DETAILS GRID */
+.details-grid { display:grid; grid-template-columns:1fr 1fr; gap:0; padding:4px 0; }
+.detail-row { font-size:13px; color:var(--ink); word-break:break-word; padding:8px 16px; border-bottom:1px solid rgba(180,83,9,.07); }
+.detail-row strong { display:block; font-size:10px; text-transform:uppercase; letter-spacing:.5px; color:var(--ink-muted); margin-bottom:1px; font-weight:600; }
+/* PHONE — private, dashboard only */
+.phone-private {
+  grid-column: 1 / -1;
+  background: linear-gradient(135deg, #F0FFF4, #DCFCE7);
+  border: 1.5px solid #86EFAC !important;
+  border-radius: 10px; margin: 8px 12px;
+  display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+}
+.phone-badge {
+  font-size: 9px; font-weight: 800; background: #15803D; color: white;
+  border-radius: 20px; padding: 2px 8px; letter-spacing: .5px; flex-shrink: 0;
+}
+
+@media(max-width:480px){ .details-grid{ grid-template-columns:1fr; } }
+
+/* SHARE BAR */
+.share-bar {
+  position:fixed; bottom:0; left:0; right:0; z-index:200;
+  background:rgba(28,10,0,.96); backdrop-filter:blur(14px);
+  padding:12px 16px; box-shadow:0 -4px 24px rgba(0,0,0,.2);
+  transition:transform .3s cubic-bezier(.4,0,.2,1);
+}
+.share-bar.hidden { transform:translateY(110%); }
+.share-bar-inner { max-width:920px; margin:0 auto; display:flex; align-items:center; gap:8px; flex-wrap:wrap; justify-content:center; }
+.sel-count { color:#FFD9B0; font-size:13px; font-weight:700; flex-shrink:0; }
+.sb-btn {
+  padding:9px 16px; border-radius:50px; border:none; cursor:pointer;
+  font-family:'Outfit',sans-serif; font-size:13px; font-weight:700;
+  transition:transform .15s; display:flex; align-items:center; gap:5px; white-space:nowrap;
+}
+.sb-btn:hover { transform:scale(1.05); }
+.sb-wa    { background:linear-gradient(135deg,#22C55E,#16A34A); color:white; }
+.sb-sms   { background:linear-gradient(135deg,#3B82F6,#2563EB); color:white; }
+.sb-email { background:linear-gradient(135deg,var(--saffron),var(--saffron-deep)); color:white; }
+.sb-clear { background:rgba(255,255,255,.12); color:#FFD9B0; border:1px solid rgba(255,255,255,.15); }
+
+.no-results { text-align:center; padding:52px 20px; color:var(--ink-muted); font-size:15px; }
+footer { text-align:center; padding:24px 20px 90px; font-size:12px; color:var(--ink-muted); position:relative; z-index:1; }
+
+/* COPY TOAST */
+.toast {
+  position:fixed; bottom:80px; left:50%; transform:translateX(-50%) translateY(20px);
+  background:var(--ink); color:white; padding:10px 20px; border-radius:50px;
+  font-size:13px; font-weight:600; opacity:0; pointer-events:none;
+  transition:all .3s; z-index:300;
+}
+.toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+</style>
+</head>
+<body>
+<div class="stripe"></div>
+
+<!-- ══ LOCK ══ -->
+<div id="lock-screen">
+  <span class="lock-lotus">🪷</span>
+  <div class="lock-heading-te">బోద్దేటి రాజు వివాహ మేళా</div>
+  <div class="lock-heading-en">Private Dashboard · Verified Access Only</div>
+  <div class="lock-card">
+    <div class="lock-card-icon">🔐</div>
+    <div class="lock-card-title">Verification Required</div>
+    <div class="lock-card-sub">Enter Boddeti Raju's verified phone number<br>to access all profiles</div>
+    <div class="lock-input-wrap">
+      <span class="lock-input-icon">📱</span>
+      <input class="lock-input" id="phoneInput" type="tel" placeholder="+91XXXXXXXXXX"
+        maxlength="15" oninput="onPhoneInput()" onkeydown="if(event.key==='Enter') verify()"/>
+    </div>
+    <div class="lock-hint">Any format works · e.g. +919052369813 or 15712838727</div>
+    <button class="lock-btn" id="lockBtn" onclick="verify()">🔓 లాగిన్ అవ్వండి · Verify & Enter</button>
+    <div class="lock-error" id="lockErr">❌ సరైన నంబర్ కాదు · Incorrect number</div>
+    <div class="lock-blocked" id="lockBlocked">
+      <div class="lock-blocked-te">🚫 చాలా సార్లు తప్పు</div>
+      <div class="lock-blocked-en">Too many failed attempts. Please wait.</div>
+      <div class="lock-timer" id="lockTimer">5:00</div>
+    </div>
+    <div class="lock-attempts" id="lockAttempts"></div>
+  </div>
+</div>
+
+<!-- ══ APP ══ -->
+<div id="app">
+
+<header>
+  <div class="header-inner">
+    <div class="hdr-lotus">🪷</div>
+    <div class="hdr-text">
+      <h1>Raju Bureau Dashboard</h1>
+      <p>Advocate Boddeti Raju · Free Marriage Bureau · 26 Years</p>
+    </div>
+    <div class="hdr-btns">
+      <button class="hdr-btn share-form-btn" onclick="shareFormPage()">📤 Share Form Link</button>
+      <a class="hdr-btn" href="../index.html">🏠 Home</a>
+    </div>
+  </div>
+</header>
+
+<!-- SHARE FORM CALLOUT -->
+<section class="section">
+  <div class="share-callout">
+    <div class="share-callout-text">
+      <h3>📤 Share Registration Form</h3>
+      <p>Send the form link to anyone who wants to register. They'll only see the Manual Form and AI Entry — nothing private.</p>
+    </div>
+    <div class="share-callout-btns">
+      <button class="sc-btn sc-wa" onclick="shareFormWhatsApp()">💬 Share on WhatsApp</button>
+      <button class="sc-btn sc-copy" onclick="copyFormLink()">🔗 Copy Link</button>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<section class="section">
+  <div class="section-label">📊 Live Stats</div>
+  <h2 class="section-title">All Registered Profiles</h2>
+  <div id="stats-container" class="stats-grid">
+    <div class="stats-loading">⏳ Loading profiles...</div>
+  </div>
+</section>
+
+<!-- PROFILES -->
+<section class="section">
+  <div class="section-label">🔍 Step 2</div>
+  <h2 class="section-title">Find & Share Profiles</h2>
+  <p class="section-sub">Select profiles → share with photo via WhatsApp, SMS or Email</p>
+
+  <div class="search-row">
+    <div class="search-wrap">
+      <span class="search-icon">🔎</span>
+      <input class="search-input" id="searchBar" type="text" placeholder="Search name, caste, father, profession, city…"/>
+    </div>
+  </div>
+  <div class="filter-bar">
+    <button class="filter-btn active" data-g="all">All</button>
+    <button class="filter-btn" data-g="male">👦 Male</button>
+    <button class="filter-btn" data-g="female">👧 Female</button>
+  </div>
+
+  <div id="profiles-container"></div>
+</section>
+
+<!-- FLOATING SHARE BAR -->
+<div id="share-bar" class="share-bar hidden">
+  <div class="share-bar-inner">
+    <span id="sel-count" class="sel-count">0 selected</span>
+    <button class="sb-btn sb-wa"    onclick="shareWA()">💬 WhatsApp</button>
+    <button class="sb-btn sb-sms"  onclick="shareSMS()">📱 SMS</button>
+    <button class="sb-btn sb-email" onclick="shareEmail()">📧 Email</button>
+    <button class="sb-btn sb-clear" onclick="clearSel()">✕ Clear</button>
+  </div>
+</div>
+
+<div id="toast" class="toast">✅ Copied!</div>
+
+<footer>🪷 Boddeti Raju Marriage Bureau · Free Service Since 1998</footer>
+
+</div><!-- #app -->
+
+<script>
+// ─── CONFIG ───
+const API_URL = "https://script.google.com/macros/s/AKfycbzO45Lscp0APoqDSA5z00o5eGG1tRT-rFldR8UBPR66D56Biug_KDcp8ZhK0ojXzYQE/exec";
+const FORM_SHARE_URL = window.location.origin + window.location.pathname.replace("dashboard.html","share-form.html");
+const FORM_DIRECT_URL = "https://docs.google.com/forms/d/e/1FAIpQLScdkDc5cqemXc23vy4DYUPWxjYx5H6vXLdtoIQ01RH3Bg-6VQ/viewform";
+const RAJU_NUM = "+91 90523 69813";
+const VERIFIED = ["15712838727","919052369813"];
+const MAX_ATT = 5, LOCKOUT_MS = 5*60*1000;
+
+let allProfiles=[], selected=new Set(), genderFilter="all";
+
+// ─── LOCK ───
+function norm(s){ return s.replace(/\D/g,""); }
+function isLocked(){ const t=sessionStorage.getItem("rl"); return t && parseInt(t)-Date.now()>0; }
+function getRem(){ const t=sessionStorage.getItem("rl"); return t?Math.max(0,parseInt(t)-Date.now()):0; }
+function getAtt(){ return parseInt(sessionStorage.getItem("ra")||"0"); }
+
+function unlock(){
+  sessionStorage.setItem("ra_ok","1");
+  sessionStorage.removeItem("ra"); sessionStorage.removeItem("rl");
+  document.getElementById("lock-screen").classList.add("hidden");
+  document.getElementById("app").classList.add("visible");
+  loadProfiles();
+}
+
+function verify(){
+  if(isLocked()) return;
+  const n = norm(document.getElementById("phoneInput").value);
+  const inp = document.getElementById("phoneInput");
+  const err = document.getElementById("lockErr");
+  err.style.display="none"; inp.classList.remove("err");
+  if(VERIFIED.includes(n)){ unlock(); return; }
+  inp.classList.add("err");
+  const att = getAtt()+1;
+  sessionStorage.setItem("ra",att);
+  if(att>=MAX_ATT){
+    sessionStorage.setItem("rl",(Date.now()+LOCKOUT_MS).toString());
+    sessionStorage.setItem("ra","0");
+    showLockout();
+  } else {
+    err.style.display="block";
+    document.getElementById("lockAttempts").textContent=(MAX_ATT-att)+" attempt(s) remaining";
+  }
+}
+
+function showLockout(){
+  document.getElementById("lockErr").style.display="none";
+  document.getElementById("lockBlocked").style.display="block";
+  document.getElementById("lockBtn").disabled=true;
+  document.getElementById("phoneInput").disabled=true;
+  document.getElementById("lockAttempts").textContent="";
+  const ti=document.getElementById("lockTimer");
+  const iv=setInterval(()=>{
+    const ms=getRem();
+    if(ms<=0){ clearInterval(iv); document.getElementById("lockBlocked").style.display="none"; document.getElementById("lockBtn").disabled=false; document.getElementById("phoneInput").disabled=false; return; }
+    ti.textContent=Math.floor(ms/60000)+":"+Math.floor((ms%60000)/1000).toString().padStart(2,"0");
+  },1000);
+}
+function onPhoneInput(){ document.getElementById("phoneInput").classList.remove("err"); document.getElementById("lockErr").style.display="none"; }
+
+window.addEventListener("DOMContentLoaded",()=>{
+  if(sessionStorage.getItem("ra_ok")==="1"){ unlock(); return; }
+  if(isLocked()) showLockout();
+  else setTimeout(()=>document.getElementById("phoneInput").focus(),120);
+});
+
+// ─── SHARE FORM ───
+const SHARE_MSG = `🪷 *Boddeti Raju Marriage Bureau*\n\n✅ Free marriage service · 26+ years · 2100+ marriages\n\nPlease fill this form to register:\n${FORM_DIRECT_URL}\n\n📞 Contact Boddeti Raju: ${RAJU_NUM}`;
+
+function shareFormWhatsApp(){ window.open(`https://wa.me/?text=${encodeURIComponent(SHARE_MSG)}`,"_blank"); }
+function shareFormPage(){ window.open(`https://wa.me/?text=${encodeURIComponent(SHARE_MSG)}`,"_blank"); }
+function copyFormLink(){
+  navigator.clipboard.writeText(FORM_DIRECT_URL).then(()=>showToast("✅ Form link copied!")).catch(()=>showToast("❌ Copy failed"));
+}
+
+// ─── TOAST ───
+function showToast(msg){
+  const t=document.getElementById("toast");
+  t.textContent=msg; t.classList.add("show");
+  setTimeout(()=>t.classList.remove("show"),2600);
+}
+
+// ─── HELPERS ───
+function titleCase(s){ return (s||"").toLowerCase().replace(/\b\w/g,c=>c.toUpperCase()); }
+function normCaste(r){
+  const s=(r||"Unknown").toLowerCase().replace(/[^a-z0-9\s]/gi,"").trim();
+  if(s.includes("gavara")) return "Gavara";
+  const known=["koppela velama","padmanayaka velama","viswabrahmins","gavarapalem","kaikala","velama","naidu","reddy","kapu","yadav","kamma","balija","vysya","muslim","christian","sc","st","bc","oc"];
+  for(const c of known){ if(s.includes(c.replace(/[^a-z0-9]/gi,""))) return titleCase(c); }
+  return titleCase(s);
+}
+function driveThumb(link){ const m=(link||"").match(/[-\w]{25,}/); return m?`https://drive.google.com/thumbnail?id=${m[0]}&sz=w400`:null; }
+function clean(s){ return (s||"").toString().trim().toLowerCase().replace(/\s+/g,""); }
+
+// ─── LOAD PROFILES ───
+async function loadProfiles(){
+  try{
+    const res=await fetch(API_URL);
+    const data=await res.json();
+    const seen=new Set(), unique=[];
+    data.forEach(p=>{ const k=`${clean(p.name)}_${clean(p.date_of_birth)}_${clean(p.gender)}`;
+      if(!seen.has(k)){ seen.add(k); unique.push(p); } });
+    allProfiles=unique;
+    renderStats(unique); renderProfiles();
+  } catch(e){
+    document.getElementById("stats-container").innerHTML=`<div class="stats-loading" style="color:var(--blush)">⚠️ Could not load. Check internet connection.</div>`;
+  }
+}
+
+function renderStats(data){
+  let m=0, f=0; const caste={};
+  data.forEach(p=>{
+    const c=normCaste(p.caste); if(!caste[c]) caste[c]={m:0,f:0};
+    const g=(p.gender||"").toLowerCase();
+    if(g==="male"){caste[c].m++;m++;} if(g==="female"){caste[c].f++;f++;}
+  });
+  const casteCards=Object.entries(caste).map(([n,c])=>`<div class="stat-card"><div class="stat-card-n">${c.m+c.f}</div><div class="stat-card-l">${n}</div></div>`).join("");
+  document.getElementById("stats-container").innerHTML=`
+    <div class="stat-card"><div class="stat-card-n">${m+f}</div><div class="stat-card-l">Total</div></div>
+    <div class="stat-card"><div class="stat-card-n">${m}</div><div class="stat-card-l">Male</div></div>
+    <div class="stat-card"><div class="stat-card-n">${f}</div><div class="stat-card-l">Female</div></div>
+    ${casteCards}`;
+}
+
+function renderProfiles(){
+  const q=document.getElementById("searchBar").value.toLowerCase();
+  const cont=document.getElementById("profiles-container");
+  cont.innerHTML="";
+  const groups={};
+  allProfiles.forEach((p,i)=>{
+    const g=(p.gender||"").toLowerCase();
+    if(genderFilter!=="all"&&g!==genderFilter) return;
+    if(q&&!Object.values(p).join(" ").toLowerCase().includes(q)) return;
+    const c=normCaste(p.caste); if(!groups[c]) groups[c]=[];
+    groups[c].push({...p,_i:i});
+  });
+  const keys=Object.keys(groups);
+  if(!keys.length){ cont.innerHTML=`<div class="no-results">😕 No profiles found. Try different search.</div>`; return; }
+  keys.forEach(caste=>{
+    const div=document.createElement("div"); div.className="caste-group";
+    div.innerHTML=`<div class="caste-header"><span class="caste-name">${caste}</span><span class="caste-cnt">${groups[caste].length}</span></div>`;
+    groups[caste].forEach(p=>div.appendChild(buildCard(p)));
+    cont.appendChild(div);
+  });
+}
+
+function buildCard(p){
+  const idx=p._i, isSel=selected.has(idx);
+  const g=(p.gender||"").toLowerCase();
+  const photoLinks=p.photos?p.photos.split(/[,\s]+/).filter(Boolean):[];
+  const firstThumb=photoLinks.length?driveThumb(photoLinks[0].trim()):null;
+
+  const card=document.createElement("div");
+  card.className=`profile-card${isSel?" selected":""}`;
+  card.dataset.idx=idx;
+
+  // avatar or photo
+  const avi=firstThumb
+    ? `<img class="card-photo" src="${firstThumb}" alt="Photo" onerror="this.outerHTML='<div class=\\'card-avatar ${g==="female"?"f":"m"}\\'>${g==="female"?"👩":"👨"}</div>'">`
+    : `<div class="card-avatar ${g==="female"?"f":"m"}">${g==="female"?"👩":"👨"}</div>`;
+
+  // top row
+  const top=document.createElement("div"); top.className="card-top";
+  top.innerHTML=`
+    <div class="card-checkbox" tabindex="0">${isSel?"✓":""}</div>
+    ${avi}
+    <div class="card-info">
+      <div class="card-name">${titleCase(p.name)||"Unknown"}</div>
+      <div class="card-meta">${p.age?p.age+" yrs":""} ${g?"· "+titleCase(g):""} ${p.caste?"· "+normCaste(p.caste):""}</div>
+      <div class="card-chips">
+        ${p.education?`<span class="card-chip cc-edu">🎓 ${p.education}</span>`:""}
+        ${p.profession?`<span class="card-chip cc-prof">💼 ${p.profession}</span>`:""}
+        ${p.native_place?`<span class="card-chip cc-loc">📍 ${p.native_place}</span>`:""}
+      </div>
+    </div>
+    <button class="expand-btn" aria-label="Expand">▼</button>`;
+
+  // photo gallery
+  const allPhotos=photoLinks.map((raw,i)=>{
+    const th=driveThumb(raw.trim());
+    return th
+      ? `<a href="${raw.trim()}" target="_blank"><img class="photo-thumb" src="${th}" alt="Photo ${i+1}" onerror="this.parentElement.innerHTML='<div class=\\'photo-no-img\\'>📷</div>'"/></a>`
+      : `<a href="${raw.trim()}" target="_blank"><div class="photo-no-img">📷</div></a>`;
+  }).join("");
+
+  // details — phone shown privately in dashboard, excluded from share
+  const excl=["_i","name","age","gender","caste","education","profession","photos","timestamp","","phone","mobile","contact_number","phone_number","mobile_number"];
+  const rows=Object.entries(p).filter(([k])=>!excl.includes(k))
+    .map(([k,v])=>`<div class="detail-row"><strong>${k.replace(/_/g," ")}</strong>${v||"—"}</div>`).join("");
+
+  // find phone field regardless of column name
+  const phoneVal = p.phone||p.mobile||p.contact_number||p.phone_number||p.mobile_number||"";
+  const phoneRow = phoneVal
+    ? `<div class="detail-row phone-private">
+        <span class="phone-badge">🔒 Private</span>
+        <strong>📞 Phone</strong>
+        <a href="tel:${phoneVal}" style="color:var(--jade);font-weight:700;">${phoneVal}</a>
+        <a href="https://wa.me/${phoneVal.replace(/\D/g,'')}" target="_blank" style="margin-left:8px;font-size:12px;color:#25D366;">💬 WhatsApp</a>
+      </div>`
+    : "";
+
+  const details=document.createElement("div"); details.className="card-details";
+  details.innerHTML=`
+    ${allPhotos?`<div class="photo-gallery"><span class="photo-gallery-title">📸 Photos</span>${allPhotos}</div>`:""}
+    ${phoneRow}
+    <div class="details-grid">${rows||"<div class='detail-row'>No extra details</div>"}</div>`;
+
+  card.appendChild(top); card.appendChild(details);
+
+  top.querySelector(".expand-btn").addEventListener("click",e=>{
+    e.stopPropagation();
+    const open=details.classList.toggle("open");
+    top.querySelector(".expand-btn").classList.toggle("open",open);
+  });
+  const cb=top.querySelector(".card-checkbox");
+  cb.addEventListener("click",e=>{ e.stopPropagation(); toggleSel(idx,card,cb); });
+  cb.addEventListener("keydown",e=>{ if(e.key===" "||e.key==="Enter"){ e.preventDefault(); toggleSel(idx,card,cb); }});
+  card.addEventListener("click",e=>{ if(!e.target.closest(".expand-btn")&&!e.target.closest(".card-details")) toggleSel(idx,card,cb); });
+  return card;
+}
+
+function toggleSel(idx,card,cb){
+  if(selected.has(idx)){ selected.delete(idx); card.classList.remove("selected"); cb.textContent=""; }
+  else { selected.add(idx); card.classList.add("selected"); cb.textContent="✓"; }
+  updateShareBar();
+}
+function clearSel(){
+  selected.clear();
+  document.querySelectorAll(".profile-card.selected").forEach(c=>{
+    c.classList.remove("selected"); c.querySelector(".card-checkbox").textContent="";
+  });
+  updateShareBar();
+}
+function updateShareBar(){
+  const n=selected.size;
+  document.getElementById("sel-count").textContent=`${n} profile${n!==1?"s":""} selected`;
+  document.getElementById("share-bar").classList.toggle("hidden",n===0);
+}
+
+// ─── MESSAGE BUILDER (with photos) ───
+function buildMsg(p,i,tot){
+  const hdr=tot>1?`━━━━━━━━━━━━━━━\n📋 Profile ${i+1} of ${tot}\n━━━━━━━━━━━━━━━\n`:"";
+  const lines=[];
+  lines.push(`👤 *${titleCase(p.name)}*`);
+  if(p.age) lines.push(`🎂 Age: ${p.age} years`);
+  if(p.gender) lines.push(`⚧ Gender: ${titleCase(p.gender)}`);
+  if(p.date_of_birth) lines.push(`📅 DOB: ${p.date_of_birth}`);
+  if(p.caste) lines.push(`🪔 Caste: ${normCaste(p.caste)}${p.gotra?" · Gotra: "+p.gotra:""}`);
+  if(p.height||p.weight) lines.push(`📏 ${p.height||"—"} · ${p.weight||"—"}`);
+  if(p.rashi||p.star) lines.push(`⭐ Rashi: ${p.rashi||"—"} · Star: ${p.star||"—"}`);
+  if(p.marital_status) lines.push(`💍 ${p.marital_status}`);
+  lines.push("");
+  lines.push(`🎓 *Education & Career*`);
+  if(p.education) lines.push(`   ${p.education}`);
+  if(p.profession) lines.push(`   ${p.profession}${p.salary?" · "+p.salary:""}`);
+  if(p.work_location) lines.push(`   📍 ${p.work_location}`);
+  lines.push("");
+  lines.push(`👨‍👩‍👧 *Family*`);
+  if(p.father_name) lines.push(`   Father: ${p.father_name}${p.father_profession?" ("+p.father_profession+")":""}`);
+  if(p.mother_name) lines.push(`   Mother: ${p.mother_name}${p.mother_profession?" ("+p.mother_profession+")":""}`);
+  if(p.brothers!==undefined||p.sisters!==undefined) lines.push(`   Brothers: ${p.brothers||0} · Sisters: ${p.sisters||0}`);
+  if(p.property) lines.push(`   Property: ${p.property}`);
+  lines.push("");
+  if(p.native_place) lines.push(`📍 Native: ${p.native_place}${p.city&&p.city!==p.native_place?" · Current: "+p.city:""}`);
+
+  // ── PHOTOS included in share ──
+  const photos=(p.photos||"").split(/[,\s]+/).filter(Boolean);
+  if(photos.length){
+    lines.push("");
+    lines.push(`📸 *Photo${photos.length>1?"s":""}* (tap to open)`);
+    photos.forEach((l,n)=>lines.push(`   ${n+1}. ${l.trim()}`));
+  }
+
+  lines.push("");
+  lines.push(`📞 *Contact Advocate Boddeti Raju*`);
+  lines.push(`   ☎️ ${RAJU_NUM}`);
+  lines.push(`⚠️ Do not share without permission.`);
+  return hdr+lines.join("\n");
+}
+
+function getSelProfiles(){ return allProfiles.filter((_,i)=>selected.has(i)); }
+function fullMsg(){ return getSelProfiles().map((p,i)=>buildMsg(p,i,selected.size)).join("\n\n"); }
+
+function shareWA()   { if(!selected.size){showToast("⚠️ Select a profile first!");return;} window.open(`https://wa.me/?text=${encodeURIComponent(fullMsg())}`,"_blank"); }
+function shareSMS()  { if(!selected.size){showToast("⚠️ Select a profile first!");return;} window.open(`sms:?body=${encodeURIComponent(fullMsg())}`,"_blank"); }
+function shareEmail(){ if(!selected.size){showToast("⚠️ Select a profile first!");return;} window.open(`mailto:?subject=${encodeURIComponent("Marriage Bureau Profiles")}&body=${encodeURIComponent(fullMsg())}`,"_blank"); }
+
+// ─── EVENTS ───
+document.getElementById("searchBar").addEventListener("input",renderProfiles);
+document.querySelectorAll(".filter-btn").forEach(btn=>btn.addEventListener("click",()=>{
+  document.querySelectorAll(".filter-btn").forEach(b=>b.classList.remove("active"));
+  btn.classList.add("active"); genderFilter=btn.dataset.g; renderProfiles();
+}));
+</script>
+</div><!-- stripe at bottom -->
+<div class="stripe"></div>
+</body>
+</html>

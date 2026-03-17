@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="te">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>వివాహ నమోదు – Raju Bureau</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Telugu:wght@400;600;700&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --maroon:#7B1A00; --maroon-dark:#4A0F00; --maroon-mid:#901f00;
+  --saffron:#E8600A; --saffron-pale:#FFF3EA; --saffron-border:#F5C8A8;
+  --gold:#D4A017; --gold-pale:#FFFBE8;
+  --green:#15803D; --green-pale:#F0FDF4; --green-border:#86EFAC;
+  --red:#DC2626; --red-pale:#FEF2F2;
+  --gray:#6B7280;
+  --shadow:0 4px 24px rgba(74,15,0,0.10);
+  --shadow-lg:0 8px 40px rgba(74,15,0,0.18);
+  --r:16px; --rs:10px; --rxs:8px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Nunito','Noto Sans Telugu',sans-serif;background:#FDF5EE;color:#1a0a00;min-height:100vh;}
+
+/* HERO */
+.hero{background:linear-gradient(135deg,var(--maroon-dark) 0%,var(--maroon) 55%,#C03010 100%);padding:28px 20px 56px;text-align:center;position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/svg%3E");}
+.hero-lotus{font-size:52px;line-height:1;margin-bottom:10px;filter:drop-shadow(0 4px 8px rgba(0,0,0,0.3));}
+.hero-te{font-family:'Noto Sans Telugu',sans-serif;font-size:clamp(20px,5vw,30px);font-weight:700;color:#FFD9B0;}
+.hero-en{font-size:clamp(13px,3vw,16px);color:#FFA87A;margin-top:4px;font-weight:600;}
+.hero-strip{background:rgba(255,255,255,0.12);backdrop-filter:blur(8px);border-radius:50px;display:inline-flex;gap:20px;padding:8px 22px;margin-top:14px;flex-wrap:wrap;justify-content:center;}
+.hero-stat{color:#FFE8CC;font-size:12px;font-weight:700;}
+.hero-stat strong{color:#FFD080;font-size:17px;display:block;font-weight:900;}
+
+/* MAIN */
+.main{max-width:680px;margin:-32px auto 0;padding:0 14px 80px;position:relative;z-index:1;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   TOP MODE CHOOSER
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+.chooser{background:white;border-radius:var(--r);box-shadow:var(--shadow-lg);overflow:hidden;margin-bottom:18px;border:2px solid #F0DDD0;}
+.chooser-head{background:linear-gradient(135deg,var(--gold-pale),#FFF8E8);border-bottom:2px solid #EDD98A;padding:14px 20px;text-align:center;}
+.chooser-head-te{font-family:'Noto Sans Telugu',sans-serif;font-size:17px;font-weight:700;color:var(--maroon);}
+.chooser-head-en{font-size:12px;color:var(--gray);margin-top:3px;}
+
+.mode-grid{display:grid;grid-template-columns:1fr 1fr;}
+.mode-btn{padding:18px 12px;cursor:pointer;text-align:center;border:none;background:white;transition:all 0.25s;border-top:4px solid transparent;font-family:'Nunito',sans-serif;position:relative;}
+.mode-btn:first-child{border-right:1px solid #F0DDD0;}
+.mode-btn.active{background:var(--saffron-pale);border-top-color:var(--saffron);}
+.mode-btn-icon{font-size:34px;display:block;margin-bottom:6px;}
+.mode-btn-te{font-family:'Noto Sans Telugu',sans-serif;font-size:15px;font-weight:700;color:var(--maroon);display:block;}
+.mode-btn-en{font-size:12px;color:var(--gray);font-weight:600;margin-top:3px;display:block;line-height:1.5;}
+.mode-badge{display:inline-block;margin-top:8px;font-size:10px;font-weight:800;padding:3px 12px;border-radius:20px;letter-spacing:0.5px;}
+.badge-ai{background:var(--saffron);color:white;}
+.badge-manual{background:var(--green);color:white;}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   SMART FILL PANEL
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+.smart-panel{display:none;padding:18px 18px 4px;border-top:2px solid #F0DDD0;animation:fadeUp 0.3s ease;}
+.smart-panel.open{display:block;}
+
+/* Three method tabs */
+.method-row{display:flex;gap:8px;margin-bottom:16px;}
+.mth-btn{flex:1;padding:11px 6px;border-radius:var(--rxs);border:2px solid #E8D0BC;background:white;font-family:'Nunito',sans-serif;font-size:12px;font-weight:700;cursor:pointer;color:var(--maroon);text-align:center;transition:all 0.2s;}
+.mth-btn .mi{font-size:22px;display:block;margin-bottom:3px;}
+.mth-btn.on{background:var(--maroon);border-color:var(--maroon);color:white;}
+
+/* panels */
+.mth-panel{display:none;}
+.mth-panel.show{display:block;animation:fadeUp 0.2s ease;}
+
+textarea.smart-ta{width:100%;min-height:130px;padding:14px;border:2px solid #E0C8B0;border-radius:var(--rs);font-family:'Noto Sans Telugu','Nunito',sans-serif;font-size:15px;line-height:1.7;resize:vertical;outline:none;color:#1a0a00;background:#FFFAF6;transition:border-color 0.2s;}
+textarea.smart-ta:focus{border-color:var(--saffron);box-shadow:0 0 0 3px rgba(232,96,10,0.12);}
+textarea.smart-ta::placeholder{color:#C0A090;}
+
+/* Voice */
+.voice-wrap{text-align:center;padding:16px 0 8px;}
+.voice-btn{width:84px;height:84px;border-radius:50%;border:none;cursor:pointer;background:linear-gradient(135deg,var(--saffron),#C04A00);color:white;font-size:34px;box-shadow:0 4px 20px rgba(232,96,10,0.4);transition:all 0.2s;display:inline-flex;align-items:center;justify-content:center;}
+.voice-btn:hover{transform:scale(1.06);}
+.voice-btn.rec{background:linear-gradient(135deg,var(--red),#991111);animation:pulse 1.2s infinite;}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(220,38,38,0.5)}70%{box-shadow:0 0 0 16px rgba(220,38,38,0)}100%{box-shadow:0 0 0 0 rgba(220,38,38,0)}}
+.voice-status{margin-top:10px;font-size:14px;font-weight:700;color:var(--gray);}
+.voice-hint{font-size:12px;color:var(--gray);margin-top:5px;font-style:italic;}
+.voice-out{margin-top:10px;background:#FFFAF6;border:1.5px solid #E8D0BC;border-radius:var(--rxs);padding:10px 12px;font-size:14px;min-height:44px;color:#333;display:none;line-height:1.6;text-align:left;}
+
+/* Image upload */
+.img-drop{border:2.5px dashed #E0C8B0;border-radius:var(--rs);padding:26px 16px;text-align:center;cursor:pointer;background:var(--saffron-pale);transition:all 0.2s;}
+.img-drop:hover,.img-drop.drag{border-color:var(--saffron);background:#FFE8D5;}
+.img-drop.loaded{border-color:var(--green);background:var(--green-pale);border-style:solid;}
+.img-drop-icon{font-size:46px;margin-bottom:8px;}
+.img-drop-te{font-family:'Noto Sans Telugu',sans-serif;font-size:15px;font-weight:700;color:var(--maroon);}
+.img-drop-en{font-size:12px;color:var(--gray);margin-top:4px;}
+.img-prev{margin-top:12px;border-radius:var(--rxs);overflow:hidden;display:none;}
+.img-prev img{width:100%;max-height:180px;object-fit:contain;background:#f5f0eb;}
+
+/* AI go button */
+.ai-go{width:100%;padding:15px;margin-top:14px;background:linear-gradient(135deg,var(--maroon),var(--maroon-mid));color:white;border:none;border-radius:var(--rxs);font-family:'Noto Sans Telugu','Nunito',sans-serif;font-size:16px;font-weight:800;cursor:pointer;transition:all 0.2s;box-shadow:0 4px 16px rgba(74,15,0,0.25);}
+.ai-go:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(74,15,0,0.35);}
+.ai-go:disabled{opacity:0.55;cursor:not-allowed;transform:none;}
+
+/* AI spinner */
+.ai-loader{display:none;text-align:center;padding:16px 0;}
+.ai-spin{font-size:32px;animation:spin 1.1s linear infinite;display:inline-block;}
+@keyframes spin{to{transform:rotate(360deg)}}
+.ai-msg{font-size:14px;font-weight:800;color:var(--maroon);margin-top:8px;}
+.ai-sub{font-size:12px;color:var(--gray);margin-top:3px;}
+
+/* Fill success banner */
+.fill-ok{display:none;background:var(--green-pale);border:1.5px solid var(--green-border);border-radius:var(--rxs);padding:12px 14px;margin-top:12px;font-size:13px;font-weight:700;color:var(--green);}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   PROGRESS BAR
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+.progress-bar{position:sticky;top:0;z-index:50;background:white;padding:9px 16px;box-shadow:0 2px 12px rgba(0,0,0,0.08);}
+.prog-row{display:flex;justify-content:space-between;margin-bottom:5px;font-size:12px;font-weight:700;}
+.prog-te{font-family:'Noto Sans Telugu',sans-serif;color:var(--maroon);}
+.prog-pct{color:var(--saffron);}
+.prog-track{height:7px;background:#F0DDD0;border-radius:10px;overflow:hidden;}
+.prog-fill{height:100%;background:linear-gradient(90deg,var(--saffron),var(--gold));border-radius:10px;transition:width 0.4s ease;}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   FORM SECTIONS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+.intro-card{background:white;border-radius:var(--r);padding:16px 18px;box-shadow:var(--shadow);margin-bottom:14px;border-left:5px solid var(--gold);}
+.intro-te{font-family:'Noto Sans Telugu',sans-serif;font-size:14px;line-height:1.9;color:#3a1a00;}
+.intro-en{font-size:12px;color:var(--gray);margin-top:6px;line-height:1.7;}
+.legend{font-size:12px;color:var(--gray);text-align:right;margin-bottom:8px;}
+.legend span{color:var(--red);font-weight:800;}
+
+.sec{background:white;border-radius:var(--r);box-shadow:var(--shadow);margin-bottom:14px;overflow:hidden;border:1.5px solid #F0DDD0;}
+.sec-head{background:linear-gradient(135deg,var(--saffron-pale),#FFF8F0);border-bottom:2px solid var(--saffron-border);padding:13px 18px;display:flex;align-items:center;gap:10px;}
+.sec-ico{font-size:24px;}
+.sec-te{font-family:'Noto Sans Telugu',sans-serif;font-size:15px;font-weight:700;color:var(--maroon);}
+.sec-en{font-size:10px;color:var(--saffron);font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin-top:1px;}
+.sec-body{padding:16px 16px;display:flex;flex-direction:column;gap:13px;}
+
+/* Fields */
+.field{display:flex;flex-direction:column;gap:6px;}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+@media(max-width:480px){.field-row{grid-template-columns:1fr;}}
+.lbl-te{font-family:'Noto Sans Telugu',sans-serif;font-size:15px;font-weight:700;color:#3a1a00;display:flex;align-items:center;gap:4px;}
+.lbl-en{font-size:11px;color:var(--gray);font-weight:600;}
+.req{color:var(--red);font-size:16px;}
+.hint{font-size:11px;color:var(--gray);font-style:italic;}
+.hint-te{font-family:'Noto Sans Telugu',sans-serif;}
+
+.inp,select.inp,textarea.inp{width:100%;padding:12px 14px;border:2px solid #E8D0BC;border-radius:var(--rxs);font-family:'Noto Sans Telugu','Nunito',sans-serif;font-size:15px;color:#1a0a00;outline:none;background:#FFFAF6;transition:border-color 0.2s,box-shadow 0.2s;-webkit-appearance:none;appearance:none;}
+.inp:focus,select.inp:focus,textarea.inp:focus{border-color:var(--saffron);box-shadow:0 0 0 3px rgba(232,96,10,0.12);background:white;}
+.inp.filled{border-color:var(--green-border);background:var(--green-pale);}
+.inp.err{border-color:var(--red);background:var(--red-pale);}
+textarea.inp{min-height:78px;resize:vertical;line-height:1.6;}
+select.inp{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23E8600A' stroke-width='2.5'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;background-size:16px;padding-right:36px;}
+
+/* Radio */
+.radio-group{display:flex;gap:8px;flex-wrap:wrap;}
+.radio-opt{flex:1;min-width:80px;border:2px solid #E8D0BC;border-radius:var(--rxs);padding:11px 8px;cursor:pointer;text-align:center;transition:all 0.2s;background:#FFFAF6;display:flex;flex-direction:column;align-items:center;gap:3px;}
+.radio-opt input[type=radio]{display:none;}
+.radio-opt:has(input:checked){border-color:var(--saffron);background:var(--saffron-pale);box-shadow:0 0 0 3px rgba(232,96,10,0.1);}
+.r-ico{font-size:24px;}.r-te{font-family:'Noto Sans Telugu',sans-serif;font-size:13px;font-weight:700;color:#3a1a00;}.r-en{font-size:10px;color:var(--gray);font-weight:600;}
+
+/* Photo */
+.photo-zone{border:2.5px dashed #E8D0BC;border-radius:var(--rxs);padding:22px 16px;text-align:center;cursor:pointer;background:var(--saffron-pale);transition:all 0.2s;}
+.photo-zone:hover{border-color:var(--saffron);background:#FFE8D5;}
+.photo-zone.hasp{border-color:var(--green);background:var(--green-pale);border-style:solid;}
+.pz-ico{font-size:44px;margin-bottom:6px;}.pz-te{font-family:'Noto Sans Telugu',sans-serif;font-size:15px;font-weight:700;color:var(--maroon);}
+.pz-en{font-size:12px;color:var(--gray);margin-top:3px;}.pz-sub{font-size:11px;color:#B0906A;margin-top:6px;}
+.pthumbs{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:10px;}
+.pt-wrap{position:relative;}
+.pt-img{width:68px;height:68px;object-fit:cover;border-radius:8px;border:2px solid var(--green-border);}
+.pt-rm{position:absolute;top:-6px;right:-6px;background:var(--red);color:white;border:none;border-radius:50%;width:18px;height:18px;font-size:10px;cursor:pointer;font-weight:800;display:flex;align-items:center;justify-content:center;}
+
+/* Errors + Submit */
+.err-box{background:var(--red-pale);border:1.5px solid #FECACA;border-radius:var(--rxs);padding:13px 16px;margin-bottom:14px;display:none;}
+.err-title{font-family:'Noto Sans Telugu',sans-serif;font-size:14px;font-weight:700;color:var(--red);margin-bottom:6px;}
+.err-list{font-family:'Noto Sans Telugu',sans-serif;font-size:13px;color:var(--red);line-height:2;}
+.submit-btn{width:100%;padding:18px;background:linear-gradient(135deg,var(--maroon),var(--maroon-mid));color:white;border:none;border-radius:var(--rxs);font-family:'Noto Sans Telugu','Nunito',sans-serif;font-size:17px;font-weight:800;cursor:pointer;transition:all 0.2s;box-shadow:0 6px 20px rgba(74,15,0,0.3);line-height:1.5;}
+.submit-btn:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(74,15,0,0.4);}
+.submit-btn:disabled{opacity:0.55;cursor:not-allowed;transform:none;}
+.submit-sub{font-size:12px;color:#FFA87A;display:block;font-weight:600;margin-top:3px;}
+
+/* Success */
+.success-screen{display:none;text-align:center;padding:44px 20px;background:white;border-radius:var(--r);box-shadow:var(--shadow);}
+.suc-emoji{font-size:76px;animation:pop 0.6s ease;}
+@keyframes pop{0%{transform:scale(0)}70%{transform:scale(1.2)}100%{transform:scale(1)}}
+.suc-te{font-family:'Noto Sans Telugu',sans-serif;font-size:22px;font-weight:700;color:var(--green);margin-top:14px;}
+.suc-en{font-size:14px;color:var(--gray);margin-top:6px;}
+.suc-contact{background:var(--saffron-pale);border:1.5px solid var(--saffron-border);border-radius:var(--rxs);padding:14px;margin-top:18px;}
+.suc-num{font-size:22px;font-weight:900;color:var(--saffron);letter-spacing:1px;margin-top:6px;}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════ HERO ═══════════════ -->
+<div class="hero">
+  <div class="hero-lotus">🪷</div>
+  <div class="hero-te">బోద్దేటి రాజు వివాహ మేళా</div>
+  <div class="hero-en">Advocate Boddeti Raju · Free Marriage Bureau</div>
+  <div class="hero-strip">
+    <div class="hero-stat"><strong>26</strong>సంవత్సరాలు</div>
+    <div class="hero-stat"><strong>2,100+</strong>వివాహాలు</div>
+    <div class="hero-stat"><strong>ఉచిత</strong>సేవ</div>
+  </div>
+</div>
+
+<div class="main">
+
+<!-- ═══════════════ MODE CHOOSER ═══════════════ -->
+<div class="chooser">
+  <div class="chooser-head">
+    <div class="chooser-head-te">మీకు ఏది సులభం? ఎంచుకోండి 👇</div>
+    <div class="chooser-head-en">How would you like to fill this form?</div>
+  </div>
+
+  <div class="mode-grid">
+    <button class="mode-btn" id="btnSmart" onclick="setMode('smart')">
+      <span class="mode-btn-icon">✨</span>
+      <span class="mode-btn-te">స్మార్ట్ ఫిల్</span>
+      <span class="mode-btn-en">Paste text / Speak / Upload photo<br>AI fills the form for you</span>
+      <span class="mode-badge badge-ai">సులభం · AI Magic</span>
+    </button>
+    <button class="mode-btn active" id="btnManual" onclick="setMode('manual')">
+      <span class="mode-btn-icon">📝</span>
+      <span class="mode-btn-te">స్వయంగా నింపు</span>
+      <span class="mode-btn-en">Fill each field yourself<br>Step by step in Telugu</span>
+      <span class="mode-badge badge-manual">అన్ని వివరాలు</span>
+    </button>
+  </div>
+
+  <!-- ─── SMART FILL PANEL ─── -->
+  <div class="smart-panel" id="smartPanel">
+
+    <div class="method-row">
+      <button class="mth-btn on" id="mb-paste" onclick="setMethod('paste')"><span class="mi">📋</span>అతికించు<br>Paste</button>
+      <button class="mth-btn"    id="mb-voice" onclick="setMethod('voice')"><span class="mi">🎙️</span>మాట్లాడు<br>Voice</button>
+      <button class="mth-btn"    id="mb-image" onclick="setMethod('image')"><span class="mi">📷</span>ఫోటో<br>Image</button>
+    </div>
+
+    <!-- PASTE -->
+    <div class="mth-panel show" id="mp-paste">
+      <textarea class="smart-ta" id="pasteText"
+        placeholder="ఇక్కడ వివరాలు అతికించండి లేదా టైప్ చేయండి — తెలుగు లేదా English రెండూ పర్వాలేదు!
+
+ఉదాహరణ:
+పేరు: రవి కుమార్, వయసు: 28, కులం: కాపు
+తండ్రి: రాజు రావు, తల్లి: సావిత్రి
+చదువు: B.Tech, వృత్తి: Engineer
+ఊరు: విజయవాడ, మొబైల్: 9876543210
+
+(WhatsApp message లేదా biodata text paste చేయవచ్చు)"></textarea>
+    </div>
+
+    <!-- VOICE -->
+    <div class="mth-panel" id="mp-voice">
+      <div class="voice-wrap">
+        <button class="voice-btn" id="voiceBtn" onclick="toggleVoice()">🎙️</button>
+        <div class="voice-status" id="voiceSt">మాట్లాడడానికి నొక్కండి · Tap to speak</div>
+        <div class="voice-hint">తెలుగు లేదా English లో మాట్లాడవచ్చు · Chrome browser లో పని చేస్తుంది</div>
+        <div class="voice-out" id="voiceOut"></div>
+      </div>
+    </div>
+
+    <!-- IMAGE -->
+    <div class="mth-panel" id="mp-image">
+      <div class="img-drop" id="imgDrop"
+        onclick="document.getElementById('biodataFile').click()"
+        ondragover="event.preventDefault();this.classList.add('drag')"
+        ondragleave="this.classList.remove('drag')"
+        ondrop="dropImg(event)">
+        <div class="img-drop-icon">📄</div>
+        <div class="img-drop-te">బయోడేటా ఫోటో అప్‌లోడ్ చేయండి</div>
+        <div class="img-drop-en">Upload biodata image, handwritten chit, or photo with details</div>
+      </div>
+      <input type="file" id="biodataFile" accept="image/*" style="display:none" onchange="loadBiodata(event)"/>
+      <div class="img-prev" id="imgPrev"><img id="imgPrvImg" src="" alt="biodata"/></div>
+    </div>
+
+    <!-- AI loader -->
+    <div class="ai-loader" id="aiLoader">
+      <div class="ai-spin">🔮</div>
+      <div class="ai-msg" id="aiMsg">AI చదువుతోంది...</div>
+      <div class="ai-sub" id="aiSub">తెలుగు → English అనువాదం చేస్తోంది</div>
+    </div>
+
+    <div class="fill-ok" id="fillOk">
+      ✅ AI అన్ని వివరాలు నింపింది! క్రింద చెక్ చేసి submit చేయండి.<br>
+      <span style="font-size:12px;font-weight:600">AI has filled the form below. Please review and submit.</span>
+    </div>
+
+    <button class="ai-go" id="aiGo" onclick="runAI()">✨ AI తో ఆటోమేటిక్‌గా నింపండి · Auto-fill with AI</button>
+  </div>
+</div>
+
+<!-- ═══════════════ PROGRESS ═══════════════ -->
+<div class="progress-bar">
+  <div class="prog-row">
+    <span class="prog-te">నమోదు పురోగతి · Progress</span>
+    <span class="prog-pct" id="pctLbl">0%</span>
+  </div>
+  <div class="prog-track"><div class="prog-fill" id="progFill" style="width:0%"></div></div>
+</div>
+
+<!-- INTRO -->
+<div class="intro-card">
+  <div class="intro-te">🙏 దయచేసి మీ వివరాలు నింపండి. <span style="color:var(--red);font-weight:800">★</span> గుర్తు ఉన్నవి తప్పకుండా నింపాలి. మీ వివరాలు పూర్తిగా రహస్యంగా ఉంటాయి.</div>
+  <div class="intro-en">Fields marked <span style="color:var(--red);font-weight:800">★</span> are required. Your info is confidential.</div>
+</div>
+<div class="legend"><span>★</span> తప్పనిసరి · Required</div>
+
+<!-- ①  PERSONAL -->
+<div class="sec">
+  <div class="sec-head"><div class="sec-ico">👤</div><div><div class="sec-te">వ్యక్తిగత వివరాలు</div><div class="sec-en">Personal Details</div></div></div>
+  <div class="sec-body">
+
+    <div class="field">
+      <div class="lbl-te">పేరు (పూర్తి పేరు) <span class="req">★</span></div><div class="lbl-en">Full Name</div>
+      <input class="inp" id="f_name" placeholder="మీ పూర్తి పేరు / Your full name" oninput="prog()"/>
+    </div>
+
+    <div class="field-row">
+      <div class="field">
+        <div class="lbl-te">వయసు <span class="req">★</span></div><div class="lbl-en">Age (years)</div>
+        <input class="inp" id="f_age" type="number" min="18" max="70" placeholder="వయసు" oninput="prog()"/>
+      </div>
+      <div class="field">
+        <div class="lbl-te">పుట్టిన తేదీ</div><div class="lbl-en">Date of Birth</div>
+        <input class="inp" id="f_dob" type="date" oninput="autoAge();prog()"/>
+      </div>
+    </div>
+
+    <div class="field">
+      <div class="lbl-te">లింగం <span class="req">★</span></div><div class="lbl-en">Gender</div>
+      <div class="radio-group">
+        <label class="radio-opt"><input type="radio" name="gender" value="Male" onchange="prog()"/>
+          <span class="r-ico">👨</span><span class="r-te">పురుషుడు</span><span class="r-en">Male</span></label>
+        <label class="radio-opt"><input type="radio" name="gender" value="Female" onchange="prog()"/>
+          <span class="r-ico">👩</span><span class="r-te">స్త్రీ</span><span class="r-en">Female</span></label>
+      </div>
+    </div>
+
+    <div class="field-row">
+      <div class="field">
+        <div class="lbl-te">ఎత్తు</div><div class="lbl-en">Height</div>
+        <select class="inp" id="f_height" oninput="prog()">
+          <option value="">ఎంచుకోండి</option>
+          <option>4'10"</option><option>4'11"</option><option>5'0"</option><option>5'1"</option>
+          <option>5'2"</option><option>5'3"</option><option>5'4"</option><option>5'5"</option>
+          <option>5'6"</option><option>5'7"</option><option>5'8"</option><option>5'9"</option>
+          <option>5'10"</option><option>5'11"</option><option>6'0"</option><option>6'1"</option><option>6'2"+</option>
+        </select>
+      </div>
+      <div class="field">
+        <div class="lbl-te">బరువు</div><div class="lbl-en">Weight (kg)</div>
+        <input class="inp" id="f_weight" placeholder="kg లో · e.g. 65" oninput="prog()"/>
+      </div>
+    </div>
+
+    <div class="field-row">
+      <div class="field">
+        <div class="lbl-te">రాశి</div><div class="lbl-en">Rashi</div>
+        <select class="inp" id="f_rashi" oninput="prog()">
+          <option value="">ఎంచుకోండి</option>
+          <option>మేష / Mesha</option><option>వృషభ / Vrishabha</option><option>మిథున / Mithuna</option>
+          <option>కర్కాటక / Karkataka</option><option>సింహ / Simha</option><option>కన్యా / Kanya</option>
+          <option>తుల / Tula</option><option>వృశ్చిక / Vrishchika</option><option>ధనుర్ / Dhanus</option>
+          <option>మకర / Makara</option><option>కుంభ / Kumbha</option><option>మీన / Meena</option>
+        </select>
+      </div>
+      <div class="field">
+        <div class="lbl-te">నక్షత్రం</div><div class="lbl-en">Star / Nakshatra</div>
+        <select class="inp" id="f_star" oninput="prog()">
+          <option value="">ఎంచుకోండి</option>
+          <option>అశ్విని/Ashwini</option><option>భరణి/Bharani</option><option>కృత్తిక/Krittika</option>
+          <option>రోహిణి/Rohini</option><option>మృగశిర/Mrigashira</option><option>ఆర్ద్ర/Ardra</option>
+          <option>పునర్వసు/Punarvasu</option><option>పుష్యమి/Pushyami</option><option>ఆశ్లేష/Ashlesha</option>
+          <option>మఖ/Magha</option><option>పూర్వఫల్గుణి/Purva Phalguni</option><option>ఉత్తరఫల్గుణి/Uttara Phalguni</option>
+          <option>హస్త/Hasta</option><option>చిత్త/Chitra</option><option>స్వాతి/Swati</option>
+          <option>విశాఖ/Vishakha</option><option>అనూరాధ/Anuradha</option><option>జ్యేష్ఠ/Jyeshtha</option>
+          <option>మూల/Moola</option><option>పూర్వాషాఢ/Purva Ashadha</option><option>ఉత్తరాషాఢ/Uttara Ashadha</option>
+          <option>శ్రవణం/Shravana</option><option>ధనిష్ఠ/Dhanishta</option><option>శతభిషం/Shatabhisha</option>
+          <option>పూర్వాభాద్ర/Purva Bhadra</option><option>ఉత్తరాభాద్ర/Uttara Bhadra</option><option>రేవతి/Revati</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="field">
+      <div class="lbl-te">వివాహ స్థితి</div><div class="lbl-en">Marital Status</div>
+      <div class="radio-group">
+        <label class="radio-opt"><input type="radio" name="marital" value="Never Married" checked onchange="prog()"/>
+          <span class="r-ico">🌸</span><span class="r-te">అవివాహితుడు/రాలు</span><span class="r-en">Never Married</span></label>
+        <label class="radio-opt"><input type="radio" name="marital" value="Divorced" onchange="prog()"/>
+          <span class="r-ico">📋</span><span class="r-te">విడాకులు</span><span class="r-en">Divorced</span></label>
+        <label class="radio-opt"><input type="radio" name="marital" value="Widowed" onchange="prog()"/>
+          <span class="r-ico">🕊️</span><span class="r-te">వితంతువు</span><span class="r-en">Widowed</span></label>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ② CASTE -->
+<div class="sec">
+  <div class="sec-head"><div class="sec-ico">🪔</div><div><div class="sec-te">కులం & గోత్రం</div><div class="sec-en">Caste & Gotra</div></div></div>
+  <div class="sec-body">
+    <div class="field-row">
+      <div class="field">
+        <div class="lbl-te">కులం <span class="req">★</span></div><div class="lbl-en">Caste</div>
+        <input class="inp" id="f_caste" placeholder="మీ కులం" list="casteList" oninput="prog()"/>
+        <datalist id="casteList">
+          <option>కాపు/Kapu</option><option>కమ్మ/Kamma</option><option>రెడ్డి/Reddy</option>
+          <option>వెలమ/Velama</option><option>నాయుడు/Naidu</option><option>గవర/Gavara</option>
+          <option>బలిజ/Balija</option><option>యాదవ/Yadav</option><option>వైశ్య/Vysya</option>
+          <option>విశ్వబ్రాహ్మణ/Vishwabrahmana</option><option>కైకాల/Kaikala</option>
+          <option>ముస్లిం/Muslim</option><option>క్రిస్టియన్/Christian</option><option>SC</option><option>ST</option><option>BC</option>
+        </datalist>
+      </div>
+      <div class="field">
+        <div class="lbl-te">గోత్రం</div><div class="lbl-en">Gotra</div>
+        <input class="inp" id="f_gotra" placeholder="గోత్రం పేరు" oninput="prog()"/>
+      </div>
+    </div>
+    <div class="field">
+      <div class="lbl-te">ఉపకులం (ఉంటే)</div><div class="lbl-en">Sub-caste (if any)</div>
+      <input class="inp" id="f_subcaste" placeholder="ఉపకులం" oninput="prog()"/>
+    </div>
+  </div>
+</div>
+
+<!-- ③ EDUCATION -->
+<div class="sec">
+  <div class="sec-head"><div class="sec-ico">🎓</div><div><div class="sec-te">చదువు & వృత్తి</div><div class="sec-en">Education & Career</div></div></div>
+  <div class="sec-body">
+    <div class="field">
+      <div class="lbl-te">చదువు అర్హత <span class="req">★</span></div><div class="lbl-en">Highest Education</div>
+      <select class="inp" id="f_education" oninput="prog()">
+        <option value="">ఎంచుకోండి / Select</option>
+        <option>10వ తరగతి / 10th Class</option><option>ఇంటర్మీడియెట్ / Intermediate</option>
+        <option>డిప్లోమా / Diploma</option><option>డిగ్రీ (B.A/B.Sc/B.Com)</option>
+        <option>B.Tech / B.E</option><option>M.B.B.S</option><option>M.Tech / M.E</option>
+        <option>M.A / M.Sc / M.Com</option><option>MBA</option><option>CA / CMA / CS</option>
+        <option>Ph.D</option><option>ఇతర / Other</option>
+      </select>
+    </div>
+    <div class="field">
+      <div class="lbl-te">వృత్తి / ఉద్యోగం <span class="req">★</span></div><div class="lbl-en">Profession / Job</div>
+      <input class="inp" id="f_profession" placeholder="Engineer, Teacher, Farmer, Business..." list="profList" oninput="prog()"/>
+      <datalist id="profList">
+        <option>Software Engineer</option><option>Government Employee</option><option>Teacher / Lecturer</option>
+        <option>Doctor</option><option>Farmer / Agriculture</option><option>Business / Self-employed</option>
+        <option>Bank Employee</option><option>Police / Army</option><option>Nurse</option><option>Not Employed</option>
+      </datalist>
+    </div>
+    <div class="field-row">
+      <div class="field">
+        <div class="lbl-te">నెలవారీ జీతం</div><div class="lbl-en">Monthly Salary (₹)</div>
+        <input class="inp" id="f_salary" placeholder="ఉదా: 25000" oninput="prog()"/>
+      </div>
+      <div class="field">
+        <div class="lbl-te">ఉద్యోగ స్థలం</div><div class="lbl-en">Work Location</div>
+        <input class="inp" id="f_workloc" placeholder="నగరం / City" oninput="prog()"/>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ④ FAMILY -->
+<div class="sec">
+  <div class="sec-head"><div class="sec-ico">👨‍👩‍👧</div><div><div class="sec-te">కుటుంబ వివరాలు</div><div class="sec-en">Family Details</div></div></div>
+  <div class="sec-body">
+    <div class="field-row">
+      <div class="field">
+        <div class="lbl-te">తండ్రి పేరు <span class="req">★</span></div><div class="lbl-en">Father's Name</div>
+        <input class="inp" id="f_father" placeholder="తండ్రి పూర్తి పేరు" oninput="prog()"/>
+      </div>
+      <div class="field">
+        <div class="lbl-te">తండ్రి వృత్తి</div><div class="lbl-en">Father's Profession</div>
+        <input class="inp" id="f_fatherprof" placeholder="ఉద్యోగం / వ్యాపారం" oninput="prog()"/>
+      </div>
+    </div>
+    <div class="field-row">
+      <div class="field">
+        <div class="lbl-te">తల్లి పేరు <span class="req">★</span></div><div class="lbl-en">Mother's Name</div>
+        <input class="inp" id="f_mother" placeholder="తల్లి పూర్తి పేరు" oninput="prog()"/>
+      </div>
+      <div class="field">
+        <div class="lbl-te">తల్లి వృత్తి</div><div class="lbl-en">Mother's Profession</div>
+        <input class="inp" id="f_motherprof" placeholder="గృహిణి / Housewife..." oninput="prog()"/>
+      </div>
+    </div>
+    <div class="field-row">
+      <div class="field">
+        <div class="lbl-te">అన్నదమ్ములు</div><div class="lbl-en">Brothers</div>
+        <select class="inp" id="f_brothers" oninput="prog()">
+          <option value="">ఎంచుకోండి</option>
+          <option>0 (లేరు)</option><option>1</option><option>2</option><option>3</option><option>4+</option>
+        </select>
+      </div>
+      <div class="field">
+        <div class="lbl-te">అక్కచెల్లెళ్ళు</div><div class="lbl-en">Sisters</div>
+        <select class="inp" id="f_sisters" oninput="prog()">
+          <option value="">ఎంచుకోండి</option>
+          <option>0 (లేరు)</option><option>1</option><option>2</option><option>3</option><option>4+</option>
+        </select>
+      </div>
+    </div>
+    <div class="field">
+      <div class="lbl-te">ఆస్తి వివరాలు</div><div class="lbl-en">Property (land, house)</div>
+      <input class="inp" id="f_property" placeholder="ఉదా: 2 ఎకరాల భూమి, స్వంత ఇల్లు" oninput="prog()"/>
+    </div>
+  </div>
+</div>
+
+<!-- ⑤ LOCATION -->
+<div class="sec">
+  <div class="sec-head"><div class="sec-ico">📍</div><div><div class="sec-te">నివాస వివరాలు</div><div class="sec-en">Location</div></div></div>
+  <div class="sec-body">
+    <div class="field-row">
+      <div class="field">
+        <div class="lbl-te">స్వంత గ్రామం <span class="req">★</span></div><div class="lbl-en">Native Village / Town</div>
+        <input class="inp" id="f_native" placeholder="మీ ఊరు పేరు" oninput="prog()"/>
+      </div>
+      <div class="field">
+        <div class="lbl-te">ప్రస్తుత నగరం</div><div class="lbl-en">Current City</div>
+        <input class="inp" id="f_city" placeholder="ఇప్పుడు ఉన్న ఊరు" oninput="prog()"/>
+      </div>
+    </div>
+    <div class="field">
+      <div class="lbl-te">పూర్తి చిరునామా</div><div class="lbl-en">Full Address</div>
+      <textarea class="inp" id="f_address" placeholder="ఇంటి నంబర్, వీధి, గ్రామం..." oninput="prog()"></textarea>
+    </div>
+  </div>
+</div>
+
+<!-- ⑥ CONTACT -->
+<div class="sec">
+  <div class="sec-head"><div class="sec-ico">📞</div><div><div class="sec-te">సంప్రదించు వివరాలు</div><div class="sec-en">Contact</div></div></div>
+  <div class="sec-body">
+    <div class="field">
+      <div class="lbl-te">మొబైల్ నంబర్ <span class="req">★</span></div><div class="lbl-en">Mobile Number</div>
+      <input class="inp" id="f_mobile" type="tel" maxlength="10" placeholder="10 అంకెల నంబర్" oninput="prog()"/>
+      <div class="hint hint-te">⚠️ ఈ నంబర్ రాజు అన్నయ్యకు మాత్రమే చూపిస్తారు</div>
+    </div>
+    <div class="field">
+      <div class="lbl-te">రెండవ నంబర్ (ఐచ్ఛికం)</div><div class="lbl-en">Alternate Number (optional)</div>
+      <input class="inp" id="f_altmobile" type="tel" maxlength="10" placeholder="రెండవ నంబర్" oninput="prog()"/>
+    </div>
+  </div>
+</div>
+
+<!-- ⑦ PHOTO -->
+<div class="sec">
+  <div class="sec-head"><div class="sec-ico">📸</div><div><div class="sec-te">ఫోటో అప్‌లోడ్ <span style="color:var(--red)">★</span></div><div class="sec-en">Profile Photo (Required)</div></div></div>
+  <div class="sec-body">
+    <div class="photo-zone" id="photoZone" onclick="document.getElementById('photoInp').click()">
+      <div class="pz-ico">📷</div>
+      <div class="pz-te">ఫోటో ఎంచుకోండి</div>
+      <div class="pz-en">Tap to select from gallery</div>
+      <div class="pz-sub">JPG, PNG · స్పష్టమైన ముఖం కనిపించే ఫోటో పెట్టండి</div>
+      <div class="pthumbs" id="pthumbs"></div>
+    </div>
+    <input type="file" id="photoInp" accept="image/*" multiple style="display:none" onchange="handlePhotos(event)"/>
+    <div class="hint">📌 A clear face photo is required. Biodata photo also accepted.</div>
+  </div>
+</div>
+
+<!-- ⑧ NOTES -->
+<div class="sec">
+  <div class="sec-head"><div class="sec-ico">ℹ️</div><div><div class="sec-te">ఇతర వివరాలు</div><div class="sec-en">Additional Info</div></div></div>
+  <div class="sec-body">
+    <div class="field">
+      <div class="lbl-te">మరేదైనా చెప్పాలనుకుంటే</div><div class="lbl-en">Anything else to mention</div>
+      <textarea class="inp" id="f_notes" placeholder="అంగవైకల్యం, ఇతర ముఖ్యమైన విషయాలు / Disability, other important info..." oninput="prog()"></textarea>
+    </div>
+  </div>
+</div>
+
+<!-- ERROR + SUBMIT -->
+<div class="err-box" id="errBox">
+  <div class="err-title">⚠️ దయచేసి ఈ fields నింపండి / Please fill these fields:</div>
+  <div class="err-list" id="errList"></div>
+</div>
+<button class="submit-btn" id="submitBtn" onclick="submitForm()">
+  ✅ నమోదు చేయండి
+  <span class="submit-sub">Submit Profile to Raju Marriage Bureau</span>
+</button>
+
+<!-- SUCCESS -->
+<div class="success-screen" id="successScreen">
+  <div class="suc-emoji">🎉</div>
+  <div class="suc-te">మీ వివరాలు విజయవంతంగా నమోదయ్యాయి!</div>
+  <div class="suc-en">Your profile has been submitted successfully.</div>
+  <div class="suc-contact">
+    <div style="font-family:'Noto Sans Telugu',sans-serif;font-size:15px;font-weight:700;color:var(--maroon);">🙏 మరింత సమాచారం కోసం రాజు అన్నయ్యను సంప్రదించండి:</div>
+    <div class="suc-num">📞 +91 90523 69813</div>
+    <div style="font-size:12px;color:var(--gray);margin-top:4px">Advocate Boddeti Raju · Free Service</div>
+  </div>
+</div>
+
+</div><!-- /main -->
+
+<script>
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzO45Lscp0APoqDSA5z00o5eGG1tRT-rFldR8UBPR66D56Biug_KDcp8ZhK0ojXzYQE/exec";
+const REQUIRED = {f_name:"పేరు/Name",f_age:"వయసు/Age",f_caste:"కులం/Caste",f_education:"చదువు/Education",f_profession:"వృత్తి/Profession",f_father:"తండ్రి పేరు/Father",f_mother:"తల్లి పేరు/Mother",f_native:"స్వంత ఊరు/Native",f_mobile:"మొబైల్/Mobile"};
+let photoFiles=[], voiceText="", biodataB64=null, curMethod="paste";
+let recognition=null, isRec=false;
+
+/* ── MODE ── */
+function setMode(m) {
+  document.getElementById("btnSmart").classList.toggle("active", m==="smart");
+  document.getElementById("btnManual").classList.toggle("active", m==="manual");
+  const sp = document.getElementById("smartPanel");
+  sp.classList.toggle("open", m==="smart");
+}
+
+/* ── METHOD ── */
+function setMethod(m) {
+  curMethod = m;
+  ["paste","voice","image"].forEach(id => {
+    document.getElementById("mb-"+id).classList.toggle("on", id===m);
+    document.getElementById("mp-"+id).classList.toggle("show", id===m);
+  });
+}
+
+/* ── VOICE ── */
+function toggleVoice() {
+  if (!("webkitSpeechRecognition" in window || "SpeechRecognition" in window)) {
+    alert("Voice input needs Chrome browser.\nChrome browser వాడండి."); return;
+  }
+  if (isRec) { recognition && recognition.stop(); return; }
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  recognition = new SR();
+  recognition.continuous = true; recognition.interimResults = true; recognition.lang = "te-IN";
+  recognition.onstart = () => {
+    isRec = true;
+    document.getElementById("voiceBtn").classList.add("rec");
+    document.getElementById("voiceBtn").textContent = "⏹️";
+    document.getElementById("voiceSt").textContent = "🔴 మాట్లాడుతున్నారు... Recording...";
+    document.getElementById("voiceOut").style.display = "block";
+  };
+  recognition.onresult = e => {
+    let fin="", tmp="";
+    for (let i=e.resultIndex; i<e.results.length; i++)
+      e.results[i].isFinal ? fin+=e.results[i][0].transcript : tmp+=e.results[i][0].transcript;
+    voiceText += fin;
+    document.getElementById("voiceOut").textContent = voiceText + tmp;
+  };
+  recognition.onerror = () => { if(recognition.lang==="te-IN") recognition.lang="en-IN"; };
+  recognition.onend = () => {
+    isRec = false;
+    document.getElementById("voiceBtn").classList.remove("rec");
+    document.getElementById("voiceBtn").textContent = "🎙️";
+    document.getElementById("voiceSt").textContent = voiceText ? "✅ పూర్తయింది! AI Fill నొక్కండి" : "మళ్ళీ నొక్కండి / Tap again";
+  };
+  recognition.start();
+}
+
+/* ── IMAGE ── */
+function loadBiodata(e) { readImg(e.target.files[0]); }
+function dropImg(e) { e.preventDefault(); document.getElementById("imgDrop").classList.remove("drag"); readImg(e.dataTransfer.files[0]); }
+function readImg(file) {
+  if (!file) return;
+  const r = new FileReader();
+  r.onload = ev => {
+    biodataB64 = ev.target.result;
+    document.getElementById("imgPrvImg").src = biodataB64;
+    document.getElementById("imgPrev").style.display = "block";
+    document.getElementById("imgDrop").classList.add("loaded");
+    document.getElementById("imgDrop").querySelector(".img-drop-te").textContent = "✅ " + file.name;
+  };
+  r.readAsDataURL(file);
+}
+
+/* ── AI FILL ── */
+async function runAI() {
+  let txt = "";
+  if (curMethod==="paste") { txt = document.getElementById("pasteText").value.trim(); if(!txt){alert("వివరాలు paste చేయండి / Please paste text");return;} }
+  else if (curMethod==="voice") { txt = voiceText.trim(); if(!txt){alert("మొదట మాట్లాడండి / Please record first");return;} }
+  else if (curMethod==="image") { if(!biodataB64){alert("ఫోటో upload చేయండి / Please upload image");return;} }
+
+  const btn = document.getElementById("aiGo");
+  btn.disabled = true;
+  document.getElementById("aiLoader").style.display = "block";
+  document.getElementById("fillOk").style.display = "none";
+
+  const sys = `You are a marriage bureau profile extractor for Telugu/Andhra families.
+Extract all info and return ONLY a valid JSON object with these exact keys:
+name, age, gender, date_of_birth, height, weight, rashi, star, marital_status,
+caste, gotra, sub_caste, education, profession, salary, work_location,
+father_name, father_profession, mother_name, mother_profession,
+brothers, sisters, property, native_place, city, address, mobile, alt_mobile, notes
+Rules: Translate ALL Telugu to English. gender = "Male" or "Female" only.
+marital_status = "Never Married" or "Divorced" or "Widowed". age = number only.
+Return ONLY the JSON — no explanation, no markdown.`;
+
+  try {
+    setAI("🔍 చదువుతోంది...", "తెలుగు → English అనువాదం");
+    let messages;
+    if (curMethod==="image" && biodataB64) {
+      const b64 = biodataB64.split(",")[1], mime = biodataB64.split(";")[0].split(":")[1];
+      messages = [{role:"user",content:[{type:"image",source:{type:"base64",media_type:mime,data:b64}},{type:"text",text:"Extract all marriage profile details from this image. Return only JSON."}]}];
+    } else {
+      messages = [{role:"user",content:txt}];
+    }
+    setAI("🧠 వివరాలు తీస్తోంది...", "పేరు, కులం, కుటుంబం చూస్తోంది");
+    const res = await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:1000,system:sys,messages})});
+    const data = await res.json();
+    const raw = data.content.map(c=>c.text||"").join("").replace(/```json|```/g,"").trim();
+    const d = JSON.parse(raw);
+    setAI("✅ నింపుతోంది...", "Form లో వివరాలు పెడుతోంది");
+    setTimeout(()=>{
+      document.getElementById("aiLoader").style.display="none";
+      fillFromAI(d);
+      document.getElementById("fillOk").style.display="block";
+      btn.disabled=false;
+      btn.textContent="🔄 మళ్ళీ ప్రయత్నించు / Retry";
+      document.getElementById("f_name").scrollIntoView({behavior:"smooth",block:"center"});
+    },600);
+  } catch(err) {
+    document.getElementById("aiLoader").style.display="none";
+    btn.disabled=false;
+    alert("లోపం వచ్చింది, మళ్ళీ ప్రయత్నించండి.\nError: " + (err.message||"Try again"));
+  }
+}
+function setAI(t,s){document.getElementById("aiMsg").textContent=t;document.getElementById("aiSub").textContent=s;}
+
+function fillFromAI(d) {
+  const map={name:"f_name",age:"f_age",date_of_birth:"f_dob",height:"f_height",weight:"f_weight",rashi:"f_rashi",star:"f_star",caste:"f_caste",gotra:"f_gotra",sub_caste:"f_subcaste",education:"f_education",profession:"f_profession",salary:"f_salary",work_location:"f_workloc",father_name:"f_father",father_profession:"f_fatherprof",mother_name:"f_mother",mother_profession:"f_motherprof",brothers:"f_brothers",sisters:"f_sisters",property:"f_property",native_place:"f_native",city:"f_city",address:"f_address",mobile:"f_mobile",alt_mobile:"f_altmobile",notes:"f_notes"};
+  Object.entries(map).forEach(([key,id])=>{
+    const el=document.getElementById(id); if(!el) return;
+    const v=(d[key]||"").toString().trim(); if(!v) return;
+    if(el.tagName==="SELECT"){
+      const match=Array.from(el.options).find(o=>o.text.toLowerCase().includes(v.toLowerCase())||o.value.toLowerCase().includes(v.toLowerCase()));
+      if(match){el.value=match.value;el.classList.add("filled");}
+    } else {el.value=v;el.classList.add("filled");}
+  });
+  if(d.gender){const r=document.querySelector(`input[name="gender"][value="${d.gender}"]`);if(r)r.checked=true;}
+  if(d.marital_status){const r=document.querySelector(`input[name="marital"][value="${d.marital_status}"]`);if(r)r.checked=true;}
+  prog();
+}
+
+/* ── PHOTOS ── */
+function handlePhotos(e) {
+  photoFiles = Array.from(e.target.files);
+  const tb = document.getElementById("pthumbs"); tb.innerHTML="";
+  document.getElementById("photoZone").classList.add("hasp");
+  photoFiles.forEach((f,i)=>{
+    const r=new FileReader();
+    r.onload=ev=>{
+      const w=document.createElement("div");w.className="pt-wrap";
+      const img=document.createElement("img");img.className="pt-img";img.src=ev.target.result;
+      const rm=document.createElement("button");rm.className="pt-rm";rm.textContent="×";
+      rm.onclick=ev2=>{ev2.stopPropagation();photoFiles.splice(i,1);w.remove();if(!photoFiles.length)document.getElementById("photoZone").classList.remove("hasp");prog();};
+      w.appendChild(img);w.appendChild(rm);tb.appendChild(w);
+    };r.readAsDataURL(f);
+  });prog();
+}
+
+/* ── PROGRESS ── */
+function prog() {
+  const total = Object.keys(REQUIRED).length + 2;
+  let filled = 0;
+  Object.keys(REQUIRED).forEach(id=>{const el=document.getElementById(id);if(el&&el.value.trim())filled++;});
+  if(document.querySelector('input[name="gender"]:checked'))filled++;
+  if(photoFiles.length>0)filled++;
+  const pct=Math.round(filled/total*100);
+  document.getElementById("progFill").style.width=pct+"%";
+  document.getElementById("pctLbl").textContent=pct+"%";
+}
+
+/* ── AUTO AGE ── */
+function autoAge(){
+  const dob=document.getElementById("f_dob").value;if(!dob)return;
+  const today=new Date(),b=new Date(dob);
+  let age=today.getFullYear()-b.getFullYear();
+  if(today.getMonth()<b.getMonth()||(today.getMonth()===b.getMonth()&&today.getDate()<b.getDate()))age--;
+  if(age>0&&age<80){document.getElementById("f_age").value=age;document.getElementById("f_age").classList.add("filled");}
+}
+
+/* ── SUBMIT ── */
+function submitForm() {
+  const errors=[];
+  Object.entries(REQUIRED).forEach(([id,lbl])=>{
+    const el=document.getElementById(id);
+    if(!el||!el.value.trim()){errors.push("• "+lbl);el&&el.classList.add("err");}
+    else el&&el.classList.remove("err");
+  });
+  if(!document.querySelector('input[name="gender"]:checked'))errors.push("• లింగం / Gender");
+  if(photoFiles.length===0)errors.push("• ఫోటో / Photo (తప్పకుండా కావాలి)");
+  const mob=document.getElementById("f_mobile").value.trim();
+  if(mob&&!/^\d{10}$/.test(mob)){errors.push("• సరైన 10 అంకెల మొబైల్ నంబర్");document.getElementById("f_mobile").classList.add("err");}
+  if(errors.length){
+    document.getElementById("errBox").style.display="block";
+    document.getElementById("errList").innerHTML=errors.join("<br>");
+    document.getElementById("errBox").scrollIntoView({behavior:"smooth",block:"center"});
+    return;
+  }
+  document.getElementById("errBox").style.display="none";
+  document.getElementById("submitBtn").disabled=true;
+  document.getElementById("submitBtn").textContent="⏳ నమోదు అవుతోంది...";
+
+  const profile={
+    name:document.getElementById("f_name").value.trim(),
+    age:document.getElementById("f_age").value.trim(),
+    date_of_birth:document.getElementById("f_dob").value,
+    gender:(document.querySelector('input[name="gender"]:checked')||{}).value||"",
+    height:document.getElementById("f_height").value,
+    weight:document.getElementById("f_weight").value.trim(),
+    rashi:document.getElementById("f_rashi").value,
+    star:document.getElementById("f_star").value,
+    marital_status:(document.querySelector('input[name="marital"]:checked')||{}).value||"Never Married",
+    caste:document.getElementById("f_caste").value.trim(),
+    gotra:document.getElementById("f_gotra").value.trim(),
+    sub_caste:document.getElementById("f_subcaste").value.trim(),
+    education:document.getElementById("f_education").value,
+    profession:document.getElementById("f_profession").value.trim(),
+    salary:document.getElementById("f_salary").value.trim(),
+    work_location:document.getElementById("f_workloc").value.trim(),
+    father_name:document.getElementById("f_father").value.trim(),
+    father_profession:document.getElementById("f_fatherprof").value.trim(),
+    mother_name:document.getElementById("f_mother").value.trim(),
+    mother_profession:document.getElementById("f_motherprof").value.trim(),
+    brothers:document.getElementById("f_brothers").value,
+    sisters:document.getElementById("f_sisters").value,
+    property:document.getElementById("f_property").value.trim(),
+    native_place:document.getElementById("f_native").value.trim(),
+    city:document.getElementById("f_city").value.trim(),
+    address:document.getElementById("f_address").value.trim(),
+    mobile:document.getElementById("f_mobile").value.trim(),
+    alt_mobile:document.getElementById("f_altmobile").value.trim(),
+    notes:document.getElementById("f_notes").value.trim(),
+    submitted_at:new Date().toLocaleString("en-IN",{timeZone:"Asia/Kolkata"})
+  };
+
+  fetch(SCRIPT_URL,{method:"POST",mode:"no-cors",headers:{"Content-Type":"application/json"},body:JSON.stringify(profile)})
+  .then(()=>{
+    document.querySelectorAll(".sec,.intro-card,.legend,.progress-bar,.chooser,.err-box,#submitBtn").forEach(el=>el.style.display="none");
+    document.getElementById("successScreen").style.display="block";
+    document.getElementById("successScreen").scrollIntoView({behavior:"smooth"});
+  })
+  .catch(()=>{
+    document.getElementById("submitBtn").disabled=false;
+    document.getElementById("submitBtn").innerHTML='✅ నమోదు చేయండి<span class="submit-sub">Submit Profile</span>';
+    alert("నెట్‌వర్క్ సమస్య. మళ్ళీ ప్రయత్నించండి.\nNetwork error. Please try again.");
+  });
+}
+
+// clear red on typing
+document.addEventListener("input",e=>{if(e.target.classList.contains("inp")&&e.target.value.trim())e.target.classList.remove("err");});
+// init
+setMode("manual");
+setMethod("paste");
+</script>
+<a href="../index.html" style="position:fixed;bottom:20px;right:20px;z-index:9999;background:linear-gradient(135deg,#F59E0B,#D97706);color:white;padding:11px 20px;border-radius:50px;text-decoration:none;font-weight:700;font-size:13px;box-shadow:0 4px 16px rgba(245,158,11,.35);display:flex;align-items:center;gap:6px;">🏠 Home</a></body>
+</html>

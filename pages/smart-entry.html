@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="te">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>AI స్మార్ట్ ఎంట్రీ · Raju Bureau</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Noto+Sans+Telugu:wght@400;600;700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --pearl:#FEFAF4;--pearl-warm:#FDF5E8;
+  --saffron:#F59E0B;--saffron-deep:#D97706;--saffron-glow:rgba(245,158,11,0.18);
+  --amber:#FBBF24;--amber-pale:#FFFBEB;
+  --terra:#C2410C;--terra-pale:#FFF7F3;
+  --gold:#B45309;--jade:#047857;--jade-pale:#ECFDF5;
+  --blush:#E11D48;--blush-pale:#FFF1F2;
+  --ink:#1C0A00;--ink-soft:#6B4226;--ink-muted:#A87E5B;
+  --divider:rgba(180,83,9,0.15);
+  --r:20px;--r-lg:28px;--r-sm:12px;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-font-smoothing:antialiased}
+body{font-family:'Outfit',sans-serif;background:var(--pearl);color:var(--ink);min-height:100vh;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:radial-gradient(ellipse 70% 55% at 15% 0%,rgba(245,158,11,.1) 0%,transparent 65%),
+  radial-gradient(ellipse 55% 45% at 85% 95%,rgba(194,65,12,.07) 0%,transparent 65%)}
+.stripe{height:5px;background:repeating-linear-gradient(90deg,var(--saffron) 0 16px,var(--terra) 16px 32px,var(--amber) 32px 48px,var(--jade) 48px 64px);position:relative;z-index:10}
+
+header{background:rgba(254,250,244,.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--divider);padding:12px 20px;position:sticky;top:0;z-index:100}
+.hdr{max-width:720px;margin:0 auto;display:flex;align-items:center;gap:12px}
+.hdr-text h1{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:700;color:var(--gold)}
+.hdr-text p{font-size:11px;color:var(--ink-muted)}
+.hdr-right{margin-left:auto;display:flex;gap:8px;align-items:center}
+.free-badge{background:linear-gradient(135deg,var(--jade),#059669);color:white;border:none;border-radius:50px;padding:5px 12px;font-size:11px;font-weight:700}
+.hdr-btn{padding:6px 14px;border-radius:50px;border:1.5px solid var(--divider);background:white;font-family:'Outfit',sans-serif;font-size:12px;font-weight:600;cursor:pointer;color:var(--ink-soft);text-decoration:none;transition:all .2s;display:inline-flex;align-items:center;gap:5px}
+.hdr-btn:hover{border-color:var(--saffron);color:var(--gold);background:var(--amber-pale)}
+
+.main{max-width:720px;margin:0 auto;padding:20px 16px 80px;position:relative;z-index:1}
+
+/* HERO */
+.hero{text-align:center;padding:12px 0 24px}
+.hero-icon{font-size:56px;display:block;margin-bottom:10px;filter:drop-shadow(0 4px 14px rgba(245,158,11,.3));animation:float 4s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-10px) rotate(2deg)}}
+.hero-te{font-family:'Noto Sans Telugu',sans-serif;font-size:clamp(20px,5vw,30px);font-weight:700;color:var(--gold)}
+.hero-en{font-family:'Cormorant Garamond',serif;font-size:15px;color:var(--ink-soft);font-style:italic;margin-top:4px}
+.hero-sub{font-size:12px;color:var(--ink-muted);margin-top:8px;line-height:1.6}
+
+/* FREE CALLOUT */
+.free-box{background:linear-gradient(135deg,var(--jade-pale),#D1FAE5);border:2px solid rgba(4,120,87,.2);border-radius:var(--r);padding:14px 18px;margin-bottom:20px;display:flex;align-items:flex-start;gap:12px}
+.free-box-icon{font-size:32px;flex-shrink:0}
+.free-box h3{font-size:14px;font-weight:700;color:var(--jade);margin-bottom:3px}
+.free-box p{font-size:12px;color:var(--ink-soft);line-height:1.6}
+
+/* API KEY SETUP */
+.setup-card{background:white;border:2px solid rgba(245,158,11,.25);border-radius:var(--r);padding:18px;margin-bottom:20px;box-shadow:0 3px 14px rgba(28,10,0,.07)}
+.setup-title{font-size:15px;font-weight:700;color:var(--gold);margin-bottom:3px}
+.setup-sub{font-size:12px;color:var(--ink-muted);margin-bottom:12px;line-height:1.6}
+.setup-steps{display:flex;flex-direction:column;gap:8px;margin-bottom:14px}
+.sstep{display:flex;gap:10px;font-size:12px;color:var(--ink-soft);line-height:1.5;align-items:flex-start}
+.sstep-n{width:22px;height:22px;min-width:22px;border-radius:50%;background:var(--amber-pale);color:var(--gold);border:1.5px solid rgba(180,83,9,.2);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;flex-shrink:0;margin-top:1px}
+.sstep a{color:var(--jade);font-weight:700;text-decoration:underline}
+.key-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.key-input{flex:1;min-width:180px;padding:11px 14px;border:2px solid var(--divider);border-radius:var(--r-sm);font-family:'Outfit',sans-serif;font-size:14px;color:var(--ink);background:var(--pearl-warm);outline:none;transition:border-color .2s,box-shadow .2s;letter-spacing:.5px}
+.key-input:focus{border-color:var(--saffron);box-shadow:0 0 0 3px var(--saffron-glow)}
+.key-save{padding:11px 20px;background:linear-gradient(135deg,var(--saffron),var(--saffron-deep));color:white;border:none;border-radius:var(--r-sm);font-family:'Outfit',sans-serif;font-size:14px;font-weight:700;cursor:pointer;white-space:nowrap;transition:all .2s}
+.key-save:hover{transform:translateY(-1px);box-shadow:0 4px 14px rgba(245,158,11,.4)}
+.key-status{font-size:12px;padding:8px 12px;border-radius:var(--r-sm);margin-top:8px;display:none;line-height:1.5}
+.key-status.ok{background:var(--jade-pale);color:var(--jade);display:block;border:1px solid rgba(4,120,87,.2)}
+.key-status.err{background:var(--blush-pale);color:var(--blush);display:block;border:1px solid rgba(225,29,72,.2)}
+
+/* STEP BAR */
+.steps-bar{display:flex;align-items:center;justify-content:center;margin-bottom:24px}
+.snode{display:flex;flex-direction:column;align-items:center;gap:4px}
+.scircle{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;background:#E8D9C8;color:var(--ink-muted);transition:all .3s}
+.scircle.active{background:var(--saffron);color:white;box-shadow:0 3px 12px rgba(245,158,11,.4)}
+.scircle.done{background:var(--jade);color:white}
+.slabel{font-size:9px;font-weight:700;color:var(--ink-muted);text-align:center;max-width:68px;line-height:1.3}
+.slabel.active{color:var(--saffron-deep)}
+.slabel.done{color:var(--jade)}
+.sline{width:32px;height:3px;background:#E8D9C8;border-radius:2px;margin-bottom:16px}
+.sline.done{background:var(--jade)}
+
+/* INPUT TABS */
+.tabs{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.itab{flex:1;min-width:80px;padding:10px 6px;border-radius:var(--r-sm);border:2px solid var(--divider);background:white;font-family:'Outfit',sans-serif;font-size:12px;font-weight:600;cursor:pointer;color:var(--ink-muted);transition:all .2s;text-align:center;display:flex;flex-direction:column;align-items:center;gap:3px}
+.itab:hover{border-color:var(--saffron);color:var(--gold)}
+.itab.active{background:var(--amber-pale);border-color:var(--saffron);color:var(--gold)}
+.itab-icon{font-size:22px}
+
+.panel{display:none}.panel.active{display:block}
+
+/* PASTE */
+.paste-area{width:100%;min-height:130px;padding:14px;border:2px solid var(--divider);border-radius:var(--r);font-family:'Outfit',sans-serif;font-size:14px;color:var(--ink);background:white;outline:none;resize:vertical;line-height:1.6;transition:border-color .2s,box-shadow .2s}
+.paste-area:focus{border-color:var(--saffron);box-shadow:0 0 0 3px var(--saffron-glow)}
+.hint{font-size:11px;color:var(--ink-muted);margin-top:5px;line-height:1.5}
+
+/* VOICE */
+.voice-wrap{text-align:center;padding:20px}
+.lang-bar{display:flex;gap:8px;justify-content:center;margin-bottom:16px}
+.lbtn{padding:7px 16px;border-radius:50px;border:1.5px solid var(--divider);background:white;font-family:'Outfit',sans-serif;font-size:13px;font-weight:600;cursor:pointer;color:var(--ink-soft);transition:all .2s}
+.lbtn.active{background:var(--amber-pale);border-color:var(--saffron);color:var(--gold)}
+.mic-btn{width:84px;height:84px;border-radius:50%;border:none;cursor:pointer;font-size:34px;display:flex;align-items:center;justify-content:center;margin:0 auto 14px;background:linear-gradient(135deg,var(--saffron),var(--saffron-deep));color:white;box-shadow:0 6px 22px rgba(245,158,11,.4);transition:all .2s}
+.mic-btn:hover{transform:scale(1.05)}
+.mic-btn.rec{background:linear-gradient(135deg,var(--blush),#BE123C);box-shadow:0 6px 22px rgba(225,29,72,.4);animation:pmicf 1s infinite}
+@keyframes pmicf{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
+.mic-status{font-size:13px;color:var(--ink-soft);font-weight:600}
+.transcript{margin-top:14px;background:var(--pearl-warm);border:1.5px solid var(--divider);border-radius:var(--r-sm);padding:12px;font-size:13px;color:var(--ink);line-height:1.6;min-height:50px;text-align:left;display:none}
+
+/* IMAGE */
+.upload-zone{border:2.5px dashed rgba(180,83,9,.3);border-radius:var(--r);padding:28px 16px;text-align:center;background:white;cursor:pointer;transition:all .2s;position:relative}
+.upload-zone:hover,.upload-zone.drag{border-color:var(--saffron);background:var(--amber-pale)}
+.upload-zone input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.upload-icon{font-size:44px;margin-bottom:8px;display:block}
+.upload-zone h3{font-size:15px;font-weight:700;color:var(--ink)}
+.upload-zone p{font-size:12px;color:var(--ink-muted);margin-top:4px}
+.img-preview{width:100%;max-height:240px;object-fit:contain;border-radius:var(--r-sm);border:2px solid var(--divider);margin-top:14px;display:none}
+.rm-img{margin-top:8px;background:none;border:1.5px solid rgba(225,29,72,.3);color:var(--blush);border-radius:50px;padding:6px 16px;font-family:'Outfit',sans-serif;font-size:12px;font-weight:600;cursor:pointer;display:none;transition:all .2s}
+.rm-img:hover{background:var(--blush-pale)}
+
+/* PROCESS BTN */
+.proc-btn{width:100%;margin-top:14px;padding:15px;border:none;border-radius:var(--r);font-family:'Noto Sans Telugu','Outfit',sans-serif;font-size:15px;font-weight:700;cursor:pointer;background:linear-gradient(135deg,var(--saffron),var(--saffron-deep));color:white;box-shadow:0 5px 18px rgba(245,158,11,.35);transition:all .2s;display:flex;align-items:center;justify-content:center;gap:8px}
+.proc-btn:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 8px 24px rgba(245,158,11,.45)}
+.proc-btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.err-box{background:var(--blush-pale);border:2px solid rgba(225,29,72,.25);border-radius:var(--r-sm);padding:12px 14px;margin-top:10px;font-size:13px;color:var(--blush);display:none;line-height:1.5}
+.err-box.show{display:block}
+
+/* LOADING */
+.load-card{background:white;border-radius:var(--r);border:1.5px solid var(--divider);padding:28px 20px;text-align:center;box-shadow:0 3px 14px rgba(28,10,0,.07)}
+.spinner{width:50px;height:50px;border:4px solid var(--amber-pale);border-top-color:var(--saffron);border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 14px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.load-title{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:700;color:var(--ink);margin-bottom:4px}
+.load-sub{font-size:12px;color:var(--ink-muted);line-height:1.5}
+.load-steps{display:flex;flex-direction:column;gap:7px;margin-top:14px;text-align:left}
+.lstep{display:flex;align-items:center;gap:9px;font-size:12px;color:var(--ink-muted);padding:7px 10px;border-radius:var(--r-sm);transition:all .3s}
+.lstep.active{background:var(--amber-pale);color:var(--gold);font-weight:700}
+.lstep.done{color:var(--jade);font-weight:600}
+.lstep-ic{width:18px;text-align:center}
+
+/* FORM */
+.form-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:8px}
+.form-title{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;color:var(--ink)}
+.ai-tag{background:var(--jade-pale);color:var(--jade);border:1px solid rgba(4,120,87,.2);border-radius:50px;padding:4px 12px;font-size:10px;font-weight:700}
+.fgroup{background:white;border-radius:var(--r);border:1.5px solid var(--divider);overflow:hidden;margin-bottom:10px;box-shadow:0 2px 10px rgba(28,10,0,.06)}
+.fgroup-title{background:var(--pearl-warm);padding:10px 14px;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.7px;color:var(--ink-muted);border-bottom:1px solid var(--divider)}
+.fgrid{display:grid;grid-template-columns:1fr 1fr;gap:0}
+@media(max-width:460px){.fgrid{grid-template-columns:1fr}}
+.fitem{padding:10px 14px;border-bottom:1px solid rgba(180,83,9,.07);border-right:1px solid rgba(180,83,9,.07)}
+.fitem:nth-child(2n){border-right:none}
+.fitem.fw{grid-column:1/-1;border-right:none}
+.flabel{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--ink-muted);margin-bottom:3px;display:flex;align-items:center;gap:4px}
+.ai-dot{display:inline-flex;align-items:center;gap:2px;background:var(--jade-pale);color:var(--jade);font-size:8px;font-weight:700;padding:1px 5px;border-radius:20px;border:1px solid rgba(4,120,87,.2)}
+.finput{width:100%;border:none;outline:none;font-family:'Outfit',sans-serif;font-size:13px;color:var(--ink);background:transparent;padding:3px 0;min-height:26px}
+.finput.ai{color:var(--jade);font-weight:600}
+
+/* SUBMIT */
+.sub-btn{width:100%;margin-top:20px;padding:16px;border:none;border-radius:var(--r);font-family:'Noto Sans Telugu','Outfit',sans-serif;font-size:16px;font-weight:700;cursor:pointer;background:linear-gradient(135deg,#1C0A00,#4A1800);color:white;box-shadow:0 5px 20px rgba(28,10,0,.3);transition:all .2s;display:flex;align-items:center;justify-content:center;gap:8px}
+.sub-btn:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 8px 28px rgba(28,10,0,.4)}
+.sub-btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.retry-btn{width:100%;margin-top:8px;padding:12px;border:2px solid var(--divider);border-radius:var(--r);background:white;font-family:'Outfit',sans-serif;font-size:13px;font-weight:600;cursor:pointer;color:var(--ink-soft);transition:all .2s}
+.retry-btn:hover{border-color:var(--saffron);color:var(--gold);background:var(--amber-pale)}
+
+/* SUCCESS */
+.success-card{background:linear-gradient(135deg,var(--jade-pale),#D1FAE5);border:2px solid rgba(4,120,87,.25);border-radius:var(--r-lg);padding:28px 20px;text-align:center;box-shadow:0 8px 28px rgba(4,120,87,.12)}
+.success-icon{font-size:60px;display:block;margin-bottom:10px;animation:bounce .5s ease}
+@keyframes bounce{0%{transform:scale(0.5)}60%{transform:scale(1.1)}100%{transform:scale(1)}}
+.success-title{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:700;color:var(--jade)}
+.success-sub{font-size:13px;color:var(--ink-soft);margin-top:6px;line-height:1.6}
+.new-btn{margin-top:18px;padding:13px 26px;background:linear-gradient(135deg,var(--saffron),var(--saffron-deep));color:white;border:none;border-radius:50px;font-family:'Outfit',sans-serif;font-size:14px;font-weight:700;cursor:pointer;box-shadow:0 4px 14px rgba(245,158,11,.35);transition:all .2s}
+.new-btn:hover{transform:translateY(-2px)}
+
+.sec{display:none}.sec.active{display:block}
+
+.toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--ink);color:white;padding:9px 18px;border-radius:50px;font-size:13px;font-weight:600;opacity:0;pointer-events:none;transition:all .3s;z-index:999;white-space:nowrap}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+</style>
+</head>
+<body>
+<div class="stripe"></div>
+<header>
+  <div class="hdr">
+    <div class="hdr-text">
+      <h1>🤖 AI స్మార్ట్ ఎంట్రీ</h1>
+      <p>Powered by Google Gemini · Free forever</p>
+    </div>
+    <div class="hdr-right">
+      <span class="free-badge">✅ FREE</span>
+      <a class="hdr-btn" href="../index.html">🏠 Home</a>
+    </div>
+  </div>
+</header>
+
+<div class="main">
+
+  <div class="hero">
+    <span class="hero-icon">🪷</span>
+    <div class="hero-te">AI తో వేగంగా నమోదు చేయండి</div>
+    <div class="hero-en">Smart Profile Entry · Google Gemini (Free)</div>
+    <div class="hero-sub">Paste text, speak in Telugu, or upload biodata photo — AI fills everything. Completely free!</div>
+  </div>
+
+  <!-- FREE BOX -->
+  <div class="free-box">
+    <div class="free-box-icon">🎉</div>
+    <div>
+      <h3>100% Free — Google Gemini API</h3>
+      <p>Uses Google's free AI. Just get a free API key from Google AI Studio — no credit card, no monthly fee. Key is saved on your device only.</p>
+    </div>
+  </div>
+
+  <!-- API KEY SETUP -->
+  <div class="setup-card" id="setupCard">
+    <div class="setup-title">🔑 One-time Setup — Get Free API Key</div>
+    <div class="setup-sub">Takes 2 minutes. Only done once. Key stays on your phone/computer.</div>
+    <div class="setup-steps">
+      <div class="sstep"><div class="sstep-n">1</div><div>Go to <a href="https://aistudio.google.com/apikey" target="_blank">aistudio.google.com/apikey</a> → Sign in with Google</div></div>
+      <div class="sstep"><div class="sstep-n">2</div><div>Click <strong>"Create API Key"</strong> → Copy it (starts with "AIza...")</div></div>
+      <div class="sstep"><div class="sstep-n">3</div><div>Paste below → Save. Done! 🎉</div></div>
+    </div>
+    <div class="key-row">
+      <input class="key-input" id="keyInput" type="password" placeholder="AIzaSy... paste your Gemini API key" autocomplete="off"/>
+      <button class="key-save" onclick="saveKey()">Save ✅</button>
+    </div>
+    <div class="key-status" id="keyStatus"></div>
+    <div style="margin-top:8px;font-size:10px;color:var(--ink-muted)">🔒 Key stored only on your device — never shared with anyone</div>
+  </div>
+
+  <!-- STEPS -->
+  <div class="steps-bar">
+    <div class="snode"><div class="scircle active" id="sc1">1</div><div class="slabel active" id="sl1">Input</div></div>
+    <div class="sline" id="sln1"></div>
+    <div class="snode"><div class="scircle" id="sc2">🤖</div><div class="slabel" id="sl2">AI</div></div>
+    <div class="sline" id="sln2"></div>
+    <div class="snode"><div class="scircle" id="sc3">3</div><div class="slabel" id="sl3">Verify</div></div>
+    <div class="sline" id="sln3"></div>
+    <div class="snode"><div class="scircle" id="sc4">4</div><div class="slabel" id="sl4">Submit</div></div>
+  </div>
+
+  <!-- SEC 1: INPUT -->
+  <div class="sec active" id="sec-input">
+    <div class="tabs">
+      <button class="itab active" onclick="switchTab('paste',this)"><span class="itab-icon">📋</span>Paste / Type</button>
+      <button class="itab" onclick="switchTab('voice',this)"><span class="itab-icon">🎙️</span>Voice</button>
+      <button class="itab" onclick="switchTab('image',this)"><span class="itab-icon">📷</span>Photo</button>
+    </div>
+
+    <div class="panel active" id="pan-paste">
+      <textarea class="paste-area" id="pasteText"
+        placeholder="WhatsApp నుండి బయోడేటా ఇక్కడ అతికించండి...&#10;&#10;Example:&#10;Name: Ravi Kumar, Age: 28, Male&#10;Caste: Kapu, Education: B.Tech&#10;Profession: Software Engineer&#10;Father: Suresh Kumar&#10;Native: Vijayawada&#10;Mobile: 9876543210&#10;&#10;Telugu text also works!"></textarea>
+      <div class="hint">💡 Works with Telugu or English — WhatsApp messages, typed text, any format</div>
+    </div>
+
+    <div class="panel" id="pan-voice">
+      <div class="voice-wrap">
+        <div class="lang-bar">
+          <button class="lbtn active" onclick="setLang('te-IN',this)">🇮🇳 Telugu</button>
+          <button class="lbtn" onclick="setLang('en-IN',this)">🇬🇧 English</button>
+        </div>
+        <button class="mic-btn" id="micBtn" onclick="toggleMic()">🎙️</button>
+        <div class="mic-status" id="micStatus">మాట్లాడటానికి నొక్కండి · Tap to speak</div>
+        <div class="transcript" id="transcript"></div>
+      </div>
+    </div>
+
+    <div class="panel" id="pan-image">
+      <div class="upload-zone" id="uploadZone"
+        ondragover="ev.preventDefault();this.classList.add('drag')"
+        ondragleave="this.classList.remove('drag')"
+        ondrop="dropImg(event)">
+        <input type="file" id="imgInput" accept="image/*" onchange="loadImg(event)"/>
+        <span class="upload-icon">📄</span>
+        <h3>బయోడేటా ఫోటో అప్‌లోడ్ చేయండి</h3>
+        <p>Tap to upload · Printed, handwritten, or any biodata photo</p>
+      </div>
+      <img class="img-preview" id="imgPreview" src="" alt="Preview"/>
+      <button class="rm-img" id="rmImgBtn" onclick="clearImg()">✕ Remove Image</button>
+    </div>
+
+    <button class="proc-btn" onclick="process()">🤖 AI తో వెలికి తీయండి · Extract with AI</button>
+    <div class="err-box" id="inputErr"></div>
+  </div>
+
+  <!-- SEC 2: LOADING -->
+  <div class="sec" id="sec-load">
+    <div class="load-card">
+      <div class="spinner"></div>
+      <div class="load-title">AI చదువుతోంది...</div>
+      <div class="load-sub">Google Gemini is extracting profile details</div>
+      <div class="load-steps">
+        <div class="lstep active" id="ls1"><span class="lstep-ic">📤</span>Sending to Google Gemini...</div>
+        <div class="lstep" id="ls2"><span class="lstep-ic">🧠</span>AI analyzing content...</div>
+        <div class="lstep" id="ls3"><span class="lstep-ic">📋</span>Extracting all fields...</div>
+        <div class="lstep" id="ls4"><span class="lstep-ic">✅</span>Preparing form...</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SEC 3/4: FORM -->
+  <div class="sec" id="sec-form">
+    <div class="form-hdr">
+      <div class="form-title">✏️ సమాచారం సరిచూడండి</div>
+      <div class="ai-tag">🤖 AI Filled</div>
+    </div>
+    <div id="formFields"></div>
+    <div class="err-box" id="formErr"></div>
+    <button class="sub-btn" id="subBtn" onclick="submit()">✅ సమర్పించండి · Submit to Google Sheets</button>
+    <button class="retry-btn" onclick="goSec('sec-input');setSteps(1)">← మళ్ళీ ప్రయత్నించండి · Try Again</button>
+  </div>
+
+  <!-- SUCCESS -->
+  <div class="sec" id="sec-ok">
+    <div class="success-card">
+      <span class="success-icon">🎉</span>
+      <div class="success-title">విజయవంతంగా నమోదు అయ్యింది!</div>
+      <div class="success-sub">Profile submitted successfully.<br>Thank you for registering with Raju Bureau!</div>
+      <br>
+      <div style="font-size:12px;color:var(--ink-muted);margin-top:6px">Contact Boddeti Raju:<br><strong style="font-size:20px;color:var(--gold)">+91 90523 69813</strong></div>
+      <button class="new-btn" onclick="resetAll()">➕ మరొక ప్రొఫైల్ · Another Profile</button>
+    </div>
+  </div>
+
+</div>
+<div id="toast" class="toast"></div>
+<div class="stripe"></div>
+
+<script>
+const SHEETS = "https://script.google.com/macros/s/AKfycbzO45Lscp0APoqDSA5z00o5eGG1tRT-rFldR8UBPR66D56Biug_KDcp8ZhK0ojXzYQE/exec";
+const MODEL = "gemini-2.5-flash";
+
+let apiKey = localStorage.getItem("raju_gemini_key") || "";
+let activeTab = "paste", voiceLang = "te-IN", isRec = false;
+let recognition, voiceText = "", imgB64 = "", imgMime = "";
+
+// Init
+window.onload = () => {
+  if (apiKey) {
+    document.getElementById("keyInput").value = apiKey;
+    setKeyStatus("ok", "✅ API key saved! Ready to use.");
+  }
+};
+
+// KEY
+function saveKey() {
+  const k = document.getElementById("keyInput").value.trim();
+  if (!k.startsWith("AIza") || k.length < 20) {
+    setKeyStatus("err", "❌ Invalid key. Gemini keys start with 'AIza...'"); return;
+  }
+  localStorage.setItem("raju_gemini_key", k);
+  apiKey = k;
+  setKeyStatus("ok", "✅ API key saved! You're all set.");
+  toast("✅ Key saved!");
+}
+function setKeyStatus(cls, msg) {
+  const el = document.getElementById("keyStatus");
+  el.className = "key-status " + cls;
+  el.textContent = msg;
+  el.style.display = "block";
+}
+
+// TABS
+function switchTab(tab, btn) {
+  activeTab = tab;
+  document.querySelectorAll(".itab").forEach(b => b.classList.remove("active"));
+  document.querySelectorAll(".panel").forEach(p => p.classList.remove("active"));
+  btn.classList.add("active");
+  document.getElementById("pan-" + tab).classList.add("active");
+}
+
+// VOICE
+function setLang(l, btn) {
+  voiceLang = l;
+  document.querySelectorAll(".lbtn").forEach(b => b.classList.remove("active"));
+  btn.classList.add("active");
+}
+function toggleMic() { isRec ? stopMic() : startMic(); }
+function startMic() {
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SR) { toast("❌ Use Chrome for voice"); return; }
+  recognition = new SR();
+  recognition.lang = voiceLang; recognition.continuous = true; recognition.interimResults = true;
+  recognition.onstart = () => {
+    isRec = true;
+    document.getElementById("micBtn").classList.add("rec");
+    document.getElementById("micBtn").textContent = "⏹️";
+    document.getElementById("micStatus").textContent = "🔴 Recording... tap to stop";
+    document.getElementById("transcript").style.display = "block";
+  };
+  recognition.onresult = e => {
+    let fin = "", int = "";
+    for (let i = e.resultIndex; i < e.results.length; i++)
+      e.results[i].isFinal ? fin += e.results[i][0].transcript : int += e.results[i][0].transcript;
+    voiceText += fin;
+    document.getElementById("transcript").textContent = voiceText + int;
+  };
+  recognition.onerror = () => stopMic();
+  recognition.onend = () => { if (isRec) stopMic(); };
+  recognition.start();
+}
+function stopMic() {
+  isRec = false; if (recognition) recognition.stop();
+  document.getElementById("micBtn").classList.remove("rec");
+  document.getElementById("micBtn").textContent = "🎙️";
+  document.getElementById("micStatus").textContent = voiceText ? "✅ Done!" : "మాట్లాడటానికి నొక్కండి";
+}
+
+// IMAGE
+function loadImg(e) { if (e.target.files[0]) readImg(e.target.files[0]); }
+function dropImg(e) { e.preventDefault(); document.getElementById("uploadZone").classList.remove("drag"); const f = e.dataTransfer.files[0]; if (f && f.type.startsWith("image/")) readImg(f); }
+function readImg(file) {
+  const r = new FileReader();
+  r.onload = ev => {
+    const res = ev.target.result;
+    imgMime = (res.match(/^data:([^;]+);base64,/) || [])[1] || "image/jpeg";
+    imgB64 = res.split(",")[1];
+    document.getElementById("imgPreview").src = res;
+    document.getElementById("imgPreview").style.display = "block";
+    document.getElementById("rmImgBtn").style.display = "inline-block";
+    document.getElementById("uploadZone").style.display = "none";
+    toast("✅ Image ready!");
+  };
+  r.readAsDataURL(file);
+}
+function clearImg() {
+  imgB64 = ""; imgMime = ""; document.getElementById("imgInput").value = "";
+  document.getElementById("imgPreview").style.display = "none";
+  document.getElementById("rmImgBtn").style.display = "none";
+  document.getElementById("uploadZone").style.display = "block";
+}
+
+// CALL GEMINI
+async function gemini(prompt, b64, mime) {
+  if (!apiKey) throw new Error("No API key — please enter and save your Gemini key above.");
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent?key=${apiKey}`;
+  const parts = [];
+  if (b64) parts.push({ inline_data: { mime_type: mime, data: b64 } });
+  parts.push({ text: prompt });
+  const res = await fetch(url, {
+    method: "POST", headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ contents: [{ parts }], generationConfig: { temperature: 0.1, maxOutputTokens: 2048 } })
+  });
+  if (!res.ok) {
+    const e = await res.json();
+    const msg = e?.error?.message || "API error";
+    if (msg.includes("API_KEY_INVALID") || msg.includes("API key not valid"))
+      throw new Error("❌ Invalid API key. Please re-enter it in the setup section.");
+    throw new Error(msg);
+  }
+  const d = await res.json();
+  return d.candidates?.[0]?.content?.parts?.[0]?.text || "";
+}
+
+const PROMPT = (txt) => `You are a Telugu marriage bureau assistant. Extract profile info and return ONLY valid JSON, no markdown, no explanation.
+
+Fields to extract (empty string if not found):
+{"name":"","age":"","gender":"","date_of_birth":"","caste":"","gotra":"","rashi":"","star":"","height":"","weight":"","complexion":"","marital_status":"","education":"","profession":"","salary":"","work_location":"","father_name":"","father_profession":"","mother_name":"","mother_profession":"","brothers":"","sisters":"","property":"","native_place":"","city":"","mobile":"","email":"","expectations":""}
+
+Rules: gender = "Male" or "Female". age = number only. height = feet format. marital_status = "Never Married"/"Divorced"/"Widowed". Translate Telugu values to English.
+
+Input: ${txt || "[See image]"}
+
+JSON only:`;
+
+// PROCESS
+async function process() {
+  const errEl = document.getElementById("inputErr");
+  errEl.classList.remove("show");
+  if (!apiKey) { showErr(errEl, "Please enter and save your Gemini API key first."); return; }
+  let txt = "", b64 = "", mime = "";
+  if (activeTab === "paste") { txt = document.getElementById("pasteText").value.trim(); if (!txt) { showErr(errEl, "Please paste some text first."); return; } }
+  else if (activeTab === "voice") { txt = voiceText.trim(); if (!txt) { showErr(errEl, "Please record voice first."); return; } }
+  else { if (!imgB64) { showErr(errEl, "Please upload a biodata image first."); return; } b64 = imgB64; mime = imgMime; }
+
+  goSec("sec-load"); setSteps(2);
+  const steps = ["ls1","ls2","ls3","ls4"]; let si = 0;
+  const iv = setInterval(() => {
+    if (si > 0) { const p = document.getElementById(steps[si-1]); p.className = "lstep done"; p.querySelector(".lstep-ic").textContent = "✅"; }
+    if (si < steps.length) { document.getElementById(steps[si]).className = "lstep active"; si++; } else clearInterval(iv);
+  }, 650);
+
+  try {
+    const raw = await gemini(PROMPT(txt), b64, mime);
+    clearInterval(iv); steps.forEach(s => { const el = document.getElementById(s); el.className = "lstep done"; el.querySelector(".lstep-ic").textContent = "✅"; });
+    const jm = raw.match(/\{[\s\S]*\}/);
+    if (!jm) throw new Error("Could not parse AI response. Try again.");
+    const data = JSON.parse(jm[0]);
+    await new Promise(r => setTimeout(r, 400));
+    buildForm(data);
+    goSec("sec-form"); setSteps(3);
+  } catch(e) {
+    clearInterval(iv); goSec("sec-input"); setSteps(1);
+    showErr(errEl, e.message || "Something went wrong. Please try again.");
+  }
+}
+
+// FORM FIELDS CONFIG
+const GROUPS = [
+  { title:"👤 Personal · వ్యక్తిగత", fields:[
+    {k:"name",l:"పేరు · Name",req:true,fw:true},
+    {k:"age",l:"వయస్సు · Age",req:true},{k:"gender",l:"లింగం · Gender",req:true},
+    {k:"date_of_birth",l:"DOB"},{k:"caste",l:"కులం · Caste",req:true},{k:"gotra",l:"గోత్రం · Gotra"},
+    {k:"rashi",l:"రాశి · Rashi"},{k:"star",l:"నక్షత్రం · Star"},
+    {k:"height",l:"ఎత్తు · Height"},{k:"weight",l:"బరువు · Weight"},
+    {k:"complexion",l:"రంగు · Complexion"},{k:"marital_status",l:"వివాహ స్థితి · Status"}
+  ]},
+  { title:"🎓 Education & Career · విద్య", fields:[
+    {k:"education",l:"విద్య · Education",req:true},{k:"profession",l:"వృత్తి · Profession",req:true},
+    {k:"salary",l:"జీతం · Salary"},{k:"work_location",l:"పని ప్రదేశం · Work Location"}
+  ]},
+  { title:"👨‍👩‍👧 Family · కుటుంబం", fields:[
+    {k:"father_name",l:"తండ్రి పేరు · Father",req:true},{k:"father_profession",l:"తండ్రి వృత్తి"},
+    {k:"mother_name",l:"తల్లి పేరు · Mother",req:true},{k:"mother_profession",l:"తల్లి వృత్తి"},
+    {k:"brothers",l:"అన్నదమ్ములు · Brothers"},{k:"sisters",l:"అక్కచెల్లెళ్ళు · Sisters"},
+    {k:"property",l:"ఆస్తి · Property",fw:true}
+  ]},
+  { title:"📍 Contact · చిరునామా", fields:[
+    {k:"native_place",l:"స్వంత ఊరు · Native"},{k:"city",l:"నివాసం · City"},
+    {k:"mobile",l:"మొబైల్ · Mobile",req:true},{k:"email",l:"ఇమెయిల్ · Email"}
+  ]},
+  { title:"💍 Expectations · అపేక్షలు", fields:[{k:"expectations",l:"Partner Expectations",fw:true}]}
+];
+
+function buildForm(data) {
+  const c = document.getElementById("formFields"); c.innerHTML = "";
+  GROUPS.forEach(g => {
+    const gd = document.createElement("div"); gd.className = "fgroup";
+    gd.innerHTML = `<div class="fgroup-title">${g.title}</div>`;
+    const grid = document.createElement("div"); grid.className = "fgrid";
+    g.fields.forEach(f => {
+      const v = data[f.k] || "", ai = v !== "";
+      const d = document.createElement("div"); d.className = "fitem" + (f.fw ? " fw" : "");
+      d.innerHTML = `
+        <div class="flabel">${f.l}${f.req?'<span style="color:var(--blush);font-size:11px">*</span>':""}${ai?'<span class="ai-dot">✓ AI</span>':""}</div>
+        <input class="finput${ai?" ai":""}" id="ff_${f.k}" value="${v.replace(/"/g,"&quot;")}" placeholder="${f.l.split("·")[0].trim()}" oninput="this.classList.remove('ai')"/>`;
+      grid.appendChild(d);
+    });
+    gd.appendChild(grid); c.appendChild(gd);
+  });
+}
+
+async function submit() {
+  const btn = document.getElementById("subBtn"), errEl = document.getElementById("formErr");
+  errEl.classList.remove("show");
+  const data = {}, req = ["name","age","gender","caste","education","profession","father_name","mother_name","mobile"];
+  const missing = [];
+  GROUPS.forEach(g => g.fields.forEach(f => {
+    const el = document.getElementById("ff_" + f.k);
+    if (el) { data[f.k] = el.value.trim(); if (f.req && !data[f.k]) missing.push(f.l.split("·")[0].trim()); }
+  }));
+  if (missing.length) { showErr(errEl, "Fill required fields: " + missing.join(", ")); return; }
+  btn.disabled = true; btn.textContent = "⏳ Submitting...";
+  try {
+    const fd = new FormData();
+    Object.entries(data).forEach(([k,v]) => fd.append(k, v));
+    await fetch(SHEETS, { method:"POST", mode:"no-cors", body:fd });
+    goSec("sec-ok"); setSteps(4);
+  } catch {
+    btn.disabled = false; btn.textContent = "✅ Submit";
+    showErr(errEl, "Submit failed. Check internet and try again.");
+  }
+}
+
+// HELPERS
+function goSec(id) { document.querySelectorAll(".sec").forEach(s => s.classList.remove("active")); document.getElementById(id).classList.add("active"); window.scrollTo({top:0,behavior:"smooth"}); }
+function setSteps(s) {
+  [1,2,3,4].forEach(i => {
+    const c = document.getElementById("sc"+i), l = document.getElementById("sl"+i), ln = document.getElementById("sln"+i);
+    if (c) c.className = "scircle" + (i<s?" done":i===s?" active":"");
+    if (l) l.className = "slabel" + (i<s?" done":i===s?" active":"");
+    if (c && i<s) c.textContent = "✓";
+    if (ln) ln.className = "sline" + (i<s?" done":"");
+  });
+}
+function showErr(el, msg) { el.textContent = msg; el.classList.add("show"); el.scrollIntoView({behavior:"smooth",block:"center"}); }
+function toast(msg) { const t = document.getElementById("toast"); t.textContent = msg; t.classList.add("show"); setTimeout(() => t.classList.remove("show"), 2500); }
+function resetAll() {
+  document.getElementById("pasteText").value = "";
+  voiceText = ""; imgB64 = ""; imgMime = "";
+  document.getElementById("transcript").textContent = "";
+  document.getElementById("transcript").style.display = "none";
+  clearImg();
+  goSec("sec-input"); setSteps(1);
+  [1,2,3,4].forEach(i => { const e = document.getElementById("ls"+i); if(e){ e.className="lstep"+(i===1?" active":""); e.querySelector(".lstep-ic").textContent=["📤","🧠","📋","✅"][i-1]; } });
+}
+</script>
+</body>
+</html>
